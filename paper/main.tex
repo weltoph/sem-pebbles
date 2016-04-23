@@ -1,0 +1,67 @@
+\documentclass[draft,oneside]{scrartcl}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{epigraph}
+\usepackage[autostyle,german=guillemets]{csquotes}
+\usepackage[ngerman, english]{babel}
+\usepackage[style=numeric,backend=biber]{biblatex}
+
+\addbibresource{bibliography.bib}
+
+\begin{document}
+
+
+\setlength{\epigraphwidth}{0.7\textwidth}
+\setquotestyle{german}
+
+\title{A \emph{Grimm} idea}
+\subtitle{Exploring graphs with pebbles}
+\author{Christoph Welzel}
+\maketitle
+
+\begin{abstract}
+  In this paper we re-present and explain an approach on exploring large
+  undirected graphs with the help of markers, so called pebbles, for vertices.
+  We focus on the central ideas of this approach and explain why it is possible
+  to traverse any graph with $n$ vertices with $\Theta(\log \log n)$ pebbles
+  and the same amount of memory.
+\end{abstract}
+
+\epigraph{\enquote{Aber, Bruder Wichsstiefel, wo hinaus geht der Weg?} %
+  \enquote{Ich weiß es nicht}, antwortete der Jäger, %
+  \enquote{ich habe mich in dem Wald verirrt.}}%
+  {\emph{Die Stiefel von Büffelleder}\\Brüder Grimm}
+\section{Introduction}
+Traversing large graphs is an interesting challenge. In times of the internet
+web crawlers have to traverse immense graphs but also regarding complexity
+theory this is an interesting problem. First we will informally introduce two
+complexity classes to illustrate the importance of graph traversal from a
+complexity point of view: $L$ as the class of problems that can be solved by
+a deterministic Turing machine with additional memory of logarithmic amount
+of the input. And $SL$ as the class of problems that can be solved with the
+same space requirements but by a non-deterministic symmetrical Turing machine,
+where symmetrical means that for every computation step of the Turing machine
+there is a computation step to undo the previous one. As it turns out checking
+if two vertices $s$ and $t$ are connected in an undirected graph is a problem
+that is complete for $SL$. This problem is often refered to as
+$\mathrm{USTCON}$ and \citeauthor{logspacealg} showed in \cite{logspacealg}
+that $\mathrm{USTCON}\in L$ which collapsed $SL$ into $L$, hence $SL = L$.
+In the following we will present the results from \cite{pebbles} where another
+mechanism of graph exploration is used: with the use of pebbles which are small
+pieces of memory that can be dropped on and collected from the vertex the
+agent currently traverses it is possible to traverse a graph with $n$ vertices
+with $\mathcal{O}(\log\log n)$ memory and the same amount of pebbles.
+Furthermore we will explain why there is no smaller amount of memory or pebbles
+to generally obtain the same guarantee to traverse all $n$ vertices.
+
+
+\epigraph{Und als der volle Mond aufgestiegen war, so nahm Hänsel sein %
+Schwesterchen an der Hand und ging den Kieselsteinen nach, die schimmerten wie %
+neu geschlagene Batzen und zeigten ihnen den Weg.}%
+{\emph{Hänsel und Gretel}\\Brüder Grimm}
+\section{Pebbel-Machines}
+
+\setquotestyle{english}
+\printbibliography
+\end{document}
