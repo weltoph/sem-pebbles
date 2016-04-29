@@ -10,10 +10,17 @@
 \usepackage{amsthm}
 \usepackage{todonotes}
 
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}{Lemma}
+
 \addbibresource{bibliography.bib}
 
 \DeclareMathOperator{\din}{\delta_{\mathit{in}}}
 \DeclareMathOperator{\dout}{\delta_{\mathit{out}}}
+\DeclareMathOperator{\Tid}{T_{\text{id}}}
+\DeclareMathOperator{\Tsteps}{T_{\text{steps}}}
+\DeclareMathOperator{\Twalk}{T_{\text{walk}}}
+\DeclareMathOperator{\Thead}{T_{\text{head}}}
 
 \begin{document}
 
@@ -125,25 +132,148 @@ the port a vertex was entered through. And the next vertex is determined as the
 one connected to the port $(l_{i} + e_{i}) \mod d_{v_{i}}$. We define
 $l_{0} = 0$ and the notion $(e_{0},\dots,e_{k})^{\ast}$ for periodic sequences.
 It can be shown that a periodic sequence produces a closed walk through a
-graph. Therefore we argue that there is only a finite amount of triples of the
-form $(v,l,i)$ exists where currently the agent is on vertex $v$, entered this
-vertex through port $l$ and is currently at index $i$ of the exploration
-sequence. For two triples $(v',l',i')$ and $(v'',l'',i'')$ that both lead to
-$(v,l,i)$ it is easy to see, that $(v',l',i') = (v'',l'',i'')$. Thus, for every
-triple there is a unique predecessor and successor which implies due to the
-finiteness of the triples $(v,l,i)$ and that the agent moves infinitely it
-follows that the first triple has to be valid infinitly often. This means a
-periodic exploration sequence yields a closed walk. \todo{maybe enclose in
-proof environment}
+graph.
+\begin{proof}
+  We argue that there is only a finite amount of triples of the
+  form $(v,l,i)$ where currently the agent is on vertex $v$, entered
+  this vertex through port $l$ and is currently at index $i$ of the exploration
+  sequence. For two triples $(v',l',i')$ and $(v'',l'',i'')$ that both lead to
+  $(v,l,i)$ it is easy to see, that $(v',l',i') = (v'',l'',i'')$. Thus, for
+  every triple there is a unique predecessor and successor which implies due to
+  the finiteness of the triples $(v,l,i)$ and that the agent moves infinitely
+  it follows that the first triple has to be valid infinitly often. This means
+  a periodic exploration sequence yields a closed walk.
+\end{proof}
 
-One result of \cite{logspacealg} states: 
-\todo{add theorem boxes and definition boxes}
-
+From the following result of \cite{logspacealg} we present how we can obtain
+an $(\mathcal{O}(1),0,\mathcal{O}(\log n))$ pebble machine that finds a closed
+walk of at least $n$ distinct vertices in any graph with bounded degree.
+\begin{thm}
+  \label{thm:logalg}
 There is an algorithm $M\in L$ which produces a universal exploration sequence
 for every regular graph with $n$ vertices.
+\end{thm}
+First we argue that we can use this algorithm to find a universal exploration
+sequence of the form $e=(e_{0},\dots,e_{k})^{\ast}$ that traverses $n$ distinct
+vertices for any 3-regular graph and requires only $\mathcal{O}(\log n)$
+memory. Therefore we rely on the traversal sequence of $M$ from Theorem
+\ref{thm:logalg} and take from that the first $k:=3n\cdot c$ indices where
+$c$ denotes the number of configurations of $M$. We can now be assured that
+$e$ actually is a universal traversal sequence for any 3-regular graph because
+otherwise $M$ would have already looped in a strict subset of vertices of some
+3-regular graph. This contradicts that $M$ produces a universal exploration
+sequence for any graph with $n$ vertices.
 
-From which we can conclude very easily the following Lemma which produces a
-universal exploration sequence 
+We can now find the $(\mathcal{O}(1),0,\mathcal{O}(\log n))$ pebble machine we
+are looking for.
+\begin{thm}
+  \label{thm:pebblewalk}
+  There is a $(\mathcal{O}(1),0,\mathcal{O}(\log n))$ pebble machine which
+  explores every given graph $G$ with bounded degree $\Delta$ either completly
+  or at least loops on $n$ distinct vertices.
+\end{thm}
+\begin{proof}
+  The main idea is to use the adapted algorithm $A$ to find for an
+  universal exploration sequence for a 3-regular graph from above. Therefore
+  we take $G$ and transform it to a 3-regular graph on which $A$ finds the
+  corresponding universal exploration sequence. The transformation replaces
+  any node $v$ with degree $d$ by $3d$ nodes which then form a circle where
+  every nodes has degree $3$. The edges of $v$ are moved to nodes in the
+  circle. Specifically the edge with port $i$ is replaced by 3 edges which are
+  attached to $(v,i), (v,i+d), (v,i+2d)$. (Note that the other
+  vertex attached to the edge is replaced by the same construction and therfore
+  offers enough ports for the newly introduced edges.) The following picture
+  illustrates this construction:\todo{add picture}
+  
+  This simulation yields at most $3\Delta n^{2}$ many nodes and can be emulated
+  with $\mathcal{O}(1)$ many memory space since it is only needed to store
+  the second component of the inserted nodes which is bounded by $3\Delta$.
+  Furthermore $A$ can be run on this constructed Graph and only needs
+  $\mathcal{0}(\log n)$ space since $\mathcal{O}(\log(3\Delta n^{2})) =
+  \mathcal{O}(\log(3) + \log(\Delta) + 2\log(n)) = \mathcal{O}(\log n)$.
+  Which yields the required $(\mathcal{O}(1),0,\mathcal{O}(\log n))$ pebble
+  machine.
+\end{proof}
+
+In order to obtain the desired boundary of $\log\log n$ space and $\log\log n$
+pebbles we show that a pebble machine can be simulated by storing its tape
+content by pebbles that are placed on a closed walk.
+\begin{thm}
+  For every graph $G$ a $(s,p,2m)$ pebble machine $M$ can be simulated by
+  a $(cs,p + c,m)$ pebble machine that simulates the walk of $M$ or explores
+  $G$.
+\end{thm}
+\begin{proof}
+  The main idea of this simulation is to store the tape of $M$ by pebbles
+  placed on a closed walk in the graph. We show that every node on this closed
+  walk can be given an index and a pebble placed on a node represents the
+  binary representation of the index as the content of $M$'s tape. Again we
+  refer to the following picture for illustration: \todo{add picture}
+  We will first introduce the algorithms used to implement the simulation and
+  afterwards we will argue why this simulation respects the given space
+  boundarys.  Let $M_{\text{Walk}}$ be a pebble machine that yields a closed
+  walk on $G$. (Such a pebble machine exists due to Theorem
+  \ref{thm:pebblewalk}.) In order to manage the simulation we use some
+  variables: $\Tid, \Tsteps, \Twalk, \Thead$ where $\Tid$ is used to identify
+  the index of a vertex on the walk of $M_{\text{Walk}}$, $\Twalk$ is the tape
+  content of $M_{\text{Walk}}$ which can therefore be restarted by setting
+  $\Twalk$ to 0, $\Tsteps$ counts the number of steps taken by
+  $M_{\text{Walk}}$, and $\Thead$ stores where $M$'s head is positioned.
+  Furthermore we need some pebbles to mark certain vertices of the closed walk:
+  $p_{\text{start}}, p_{\text{tmp}}, p_{\text{next}}$ and additionally the
+  pebbles that are placed on the walk to store $M$'s tape content
+  $P_{M} = \left\{p_{1},p_{2},\dots\right\}$.
+  Now the different procedures used for the simulation can be presented:
+  \begin{description}
+    \item[Step():] Simulates on step according to $M_{\text{Walk}}$ and
+      increases $\Tsteps$.
+    \item[FindPebble($p_{i}$):] Executes \emph{Step()} until the pebble $p_{i}$
+      is observed.
+    \item[Restart():] Goes to the beginning of the closed walk by
+      \emph{FindPebble($p_{\text{start}}$)} and sets $\Tsteps,\Tid,\Twalk$ to 0
+    \item[NextDistinctVertex()] Finds the next distinct vertex of the walk. If
+      there are no more vertices on the walk (we will see that this can be
+      computed since the used walk is of constant size) it simply executes
+      \emph{Restart()}. Otherwise it does one step and drops $p_{\text{tmp}}$
+      to mark this vertex. It then stores the current amount of steps as well
+      as the current state of $M_{\text{Walk}}$ (introducing two auxiliary
+      variables $\Tsteps',\Twalk'$). It then restarts $M_{\text{Walk}}$ and
+      moves to $p_{\text{tmp}}$ by \emph{FindPebble($p_{\text{tmp}}$)}. If
+      it used the same amount of steps as stored in $\Tsteps'$ then this is the
+      first occurence of the vertex in the closed walk and therefore it is a
+      new distinct vertex and $\Tid$ can be increased. Otherwise the context of
+      $M_{\text{Walk}}$ is restored and the next vertex is checked.
+    \item[GetPebbleId($p_{i}$):] Finds the index of the vertex $p_{i}$ is
+      placed on. Beginning from the start of the closed walk
+      (found by executing \emph{Restart()} it moves along distinct vertices
+      (by using \emph{NextDistinctVertex()}) and returns $\Tid$ as soon as
+      $p_{i}$ is observed.
+    \item[PutPebbleAtId($p_{i},\mathit{id}$):] Puts pebble $p_i$ at a certain
+      index. First it picks up $p_{i}$ and restarts the walk. Then it executes
+      $\mathit{id}$ times \emph{NextDistinctVertex()} and drops $p_{i}$.
+    \item[ReadBit():] Reads the $\Thead$'s bit of $M$'s tape. $\Thead$ gives
+      the position of the bit that should be read. The walk of
+      $M_{\text{walk}}$ is only considered to a certain length (as we will see
+      later) which also determines the blocks in which $M$'s tape is separated.
+      (The index of a vertex is used to encode one block.) Therefore we can use
+      this length of the walk which pebble encodes the corresponding block
+      which is obtained.  And then the actually needed bit of the index is
+      returned.
+    \item[WriteBit($b$):] Writes $b$ to $\Thead$'s bit of $M$'s tape. First
+      $\Thead$'s bit is obtained (by \emph{ReadBit()}). And if it is actually
+      changed the corresponding pebble is moved to store the new value of the
+      memory cell. Thus, if the bit is flipped from 0 to 1 we increase $p_{i}$
+      where $i$ is the encoded memory cell index by $2^{\Thead\bmod m_{1}}$
+      where $m_{1}$ encodes the length of the considered walk. And if the bit
+      is flipped from 1 to 0 we decrease $p_{i}$'s index by
+      $2^{\Thead\bmod m_{1}}$.
+  \end{description}
+  These are the procedures used to simulate $M$. We will now discuss the space
+  boundarys and afterwards conclude with showing how the simulation actually
+  operates. Recall that $M$ is a $(s,p,2m)$ pebble machine. For the simulating
+  
+
+\end{proof}
 
 
 \setquotestyle{english}
