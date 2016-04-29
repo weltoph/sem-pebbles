@@ -33,11 +33,6 @@
   and the same amount of memory.
 \end{abstract}
 
-% \epigraph{\enquote{Aber, Bruder Wichsstiefel, wo hinaus geht der Weg?} %
-%   \enquote{Ich weiß es nicht}, antwortete der Jäger, %
-%   \enquote{ich habe mich in dem Wald verirrt.}}%
-%   {\emph{Die Stiefel von Büffelleder}\\Brüder Grimm}
-
 \epigraph{Und als der volle Mond aufgestiegen war, so nahm Hänsel sein %
 Schwesterchen an der Hand und ging den Kieselsteinen nach, die schimmerten %
 wie neu geschlagene Batzen und zeigten ihnen den Weg.}%
@@ -76,7 +71,8 @@ $\left\{0,\dots,d_{v}-1\right\}$ where $d_{v}$ denotes the degree of the vertex
 $v$. We refer to the \enquote{index} of the edge as its \emph{port}. Note that
 every edge thus has two different ports and furthermore that there is no
 relation between the ports is assumed. Additionally the degree of the
-considered graphs are assumed to be limited by a constant $\Delta$.
+considered graphs are assumed to be limited by a constant $\Delta$ and that
+there are only a finite amount of vertices.
 
 \section{Pebble machines}
 We are now ready to introduce the model of pebble machines formally. It closely
@@ -129,12 +125,25 @@ the port a vertex was entered through. And the next vertex is determined as the
 one connected to the port $(l_{i} + e_{i}) \mod d_{v_{i}}$. We define
 $l_{0} = 0$ and the notion $(e_{0},\dots,e_{k})^{\ast}$ for periodic sequences.
 It can be shown that a periodic sequence produces a closed walk through a
-graph. The proof for this relies on the finiteness of the graph and
-\todo{argue why this is a closed walk}
+graph. Therefore we argue that there is only a finite amount of triples of the
+form $(v,l,i)$ exists where currently the agent is on vertex $v$, entered this
+vertex through port $l$ and is currently at index $i$ of the exploration
+sequence. For two triples $(v',l',i')$ and $(v'',l'',i'')$ that both lead to
+$(v,l,i)$ it is easy to see, that $(v',l',i') = (v'',l'',i'')$. Thus, for every
+triple there is a unique predecessor and successor which implies due to the
+finiteness of the triples $(v,l,i)$ and that the agent moves infinitely it
+follows that the first triple has to be valid infinitly often. This means a
+periodic exploration sequence yields a closed walk. \todo{maybe enclose in
+proof environment}
 
-From the result of \cite{logspacealg} which showed that there is a
-$\mathcal{O}(\log n)$ algorithm to solve $\mathrm{USTCON}$ and which precisely
-states the following:
+One result of \cite{logspacealg} states: 
+\todo{add theorem boxes and definition boxes}
+
+There is an algorithm $M\in L$ which produces a universal exploration sequence
+for every regular graph with $n$ vertices.
+
+From which we can conclude very easily the following Lemma which produces a
+universal exploration sequence 
 
 
 \setquotestyle{english}
