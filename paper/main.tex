@@ -140,9 +140,9 @@ graph.
   sequence. For two triples $(v',l',i')$ and $(v'',l'',i'')$ that both lead to
   $(v,l,i)$ it is easy to see, that $(v',l',i') = (v'',l'',i'')$. Thus, for
   every triple there is a unique predecessor and successor which implies due to
-  the finiteness of the triples $(v,l,i)$ and that the agent moves infinitely
-  it follows that the first triple has to be valid infinitly often. This means
-  a periodic exploration sequence yields a closed walk.
+  the finiteness of the triples $(v,l,i)$ and because the agent moves
+  infinitely that the first triple has to be valid infinitly often.
+  This means a periodic exploration sequence yields a closed walk.
 \end{proof}
 
 From the following result of \cite{logspacealg} we present how we can obtain
@@ -191,7 +191,7 @@ are looking for.
   Furthermore $A$ can be run on this constructed Graph and only needs
   $\mathcal{0}(\log n)$ space since $\mathcal{O}(\log(3\Delta n^{2})) =
   \mathcal{O}(\log(3) + \log(\Delta) + 2\log(n)) = \mathcal{O}(\log n)$.
-  Which yields the required $(\mathcal{O}(1),0,\mathcal{O}(\log n))$ pebble
+  Which yields the desired $(\mathcal{O}(1),0,\mathcal{O}(\log n))$ pebble
   machine.
 \end{proof}
 
@@ -199,21 +199,41 @@ In order to obtain the desired boundary of $\log\log n$ space and $\log\log n$
 pebbles we show that a pebble machine can be simulated by storing its tape
 content by pebbles that are placed on a closed walk.
 \begin{thm}
+  \label{thm:simulation}
   For every graph $G$ a $(s,p,2m)$ pebble machine $M$ can be simulated by
   a $(cs,p + c,m)$ pebble machine that simulates the walk of $M$ or explores
   $G$.
 \end{thm}
 \begin{proof}
+  In this proof we will focus on the simulation and we leave out a thorough
+  analysis of the space requirements of the simulation since it is rather
+  technical but does not add a lot to the idea. Nevertheless we encourage
+  interested readers to see \cite{pebbles} for the details.
+
   The main idea of this simulation is to store the tape of $M$ by pebbles
   placed on a closed walk in the graph. We show that every node on this closed
   walk can be given an index and a pebble placed on a node represents the
-  binary representation of the index as the content of $M$'s tape. Again we
-  refer to the following picture for illustration: \todo{add picture}
-  We will first introduce the algorithms used to implement the simulation and
-  afterwards we will argue why this simulation respects the given space
-  boundarys.  Let $M_{\text{Walk}}$ be a pebble machine that yields a closed
-  walk on $G$. (Such a pebble machine exists due to Theorem
-  \ref{thm:pebblewalk}.) In order to manage the simulation we use some
+  binary representation of the index as the content of $M$'s tape. Therefore we
+  first off introduce a variable $m_{1}$ which is dependent on the simulated
+  pebble machine $M$ (further requirements on $m_{1}$ and how to obtain it
+  can be seen in \cite{pebbles}). We will now take the tape of $M$ and separate
+  it into $2m/m_{1}$ blocks of the size $m_{1}$. And each of these blocks is
+  encoded by the placement of a pebble on a closed walk $\omega$. So we use
+  pebble $p_{0}$ to encode the first $m_{1}$ bits, the pebble $p_{1}$ used to
+  encode the next $m_{1}$ bits and so forth. Thus, the pebble $p_{i}$ encodes
+  the bits $im_{1},\dots,(i+1)m_{1}-1$. It is therefore necessary that every
+  pebble can encode $2^{m_1}$ different states. Therefore we use a closed walk
+  $\omega$ which visits at least $2^{m_1}$ distinct vertices yielding $2^{m_1}$
+  many \enquote{states} for each pebble (by its placement on this closed walk).
+  Therefore we can use the binary representation of the indices of the nodes
+  on which the pebbles are placed as the content of the encoded memory block.
+  The following picture gives an illustration of this.\todo{add picture}
+
+  In the following we show how this simulation can be managed.
+  Let $M_{\text{Walk}}$ be pebble machine that yields $\omega$ on $G$.
+  $M_{\text{Walk}}$ can be implemented as $(\mathcal{O}(1),0,\mathcal{m_1})$
+  pebble machine by Theorem \ref{thm:pebblewalk}.
+  In order to manage the simulation we use some
   variables: $\Tid, \Tsteps, \Twalk, \Thead$ where $\Tid$ is used to identify
   the index of a vertex on the walk of $M_{\text{Walk}}$, $\Twalk$ is the tape
   content of $M_{\text{Walk}}$ which can therefore be restarted by setting
@@ -222,7 +242,7 @@ content by pebbles that are placed on a closed walk.
   Furthermore we need some pebbles to mark certain vertices of the closed walk:
   $p_{\text{start}}, p_{\text{tmp}}, p_{\text{next}}$ and additionally the
   pebbles that are placed on the walk to store $M$'s tape content
-  $P_{M} = \left\{p_{1},p_{2},\dots\right\}$.
+  $P_{M} = \left\{p_{0},p_{1},\dots,p_{2m/m_{1}-1}\right\}$.
   Now the different procedures used for the simulation can be presented:
   \begin{description}
     \item[Step():] Simulates on step according to $M_{\text{Walk}}$ and
@@ -232,8 +252,9 @@ content by pebbles that are placed on a closed walk.
     \item[Restart():] Goes to the beginning of the closed walk by
       \emph{FindPebble($p_{\text{start}}$)} and sets $\Tsteps,\Tid,\Twalk$ to 0
     \item[NextDistinctVertex()] Finds the next distinct vertex of the walk. If
-      there are no more vertices on the walk (we will see that this can be
-      computed since the used walk is of constant size) it simply executes
+      there are no more vertices on the walk (which means that already
+      $2^{m_1}$ distinct vertices have been traversed; the number of distinct
+      vertices on the walk is given by $\Tid$) it simply executes
       \emph{Restart()}. Otherwise it does one step and drops $p_{\text{tmp}}$
       to mark this vertex. It then stores the current amount of steps as well
       as the current state of $M_{\text{Walk}}$ (introducing two auxiliary
@@ -252,28 +273,38 @@ content by pebbles that are placed on a closed walk.
       index. First it picks up $p_{i}$ and restarts the walk. Then it executes
       $\mathit{id}$ times \emph{NextDistinctVertex()} and drops $p_{i}$.
     \item[ReadBit():] Reads the $\Thead$'s bit of $M$'s tape. $\Thead$ gives
-      the position of the bit that should be read. The walk of
-      $M_{\text{walk}}$ is only considered to a certain length (as we will see
-      later) which also determines the blocks in which $M$'s tape is separated.
-      (The index of a vertex is used to encode one block.) Therefore we can use
-      this length of the walk which pebble encodes the corresponding block
-      which is obtained.  And then the actually needed bit of the index is
-      returned.
+      the position of the bit that should be read. Therefore the pebble
+      $p_{\lfloor \Thead/m_{1}\rfloor}$ encodes this bit. The \enquote{state}
+      of this pebble can be obtained with
+      \emph{GetPebbleId($p_{\lfloor \Thead/m_{1}\rfloor}$)} and from the
+      encoded value the $(\Thead\mod m_{1})$-th bit is the one under $M$'s
+      head.
     \item[WriteBit($b$):] Writes $b$ to $\Thead$'s bit of $M$'s tape. First
-      $\Thead$'s bit is obtained (by \emph{ReadBit()}). And if it is actually
-      changed the corresponding pebble is moved to store the new value of the
-      memory cell. Thus, if the bit is flipped from 0 to 1 we increase $p_{i}$
-      where $i$ is the encoded memory cell index by $2^{\Thead\bmod m_{1}}$
-      where $m_{1}$ encodes the length of the considered walk. And if the bit
-      is flipped from 1 to 0 we decrease $p_{i}$'s index by
-      $2^{\Thead\bmod m_{1}}$.
+      $\Thead$'s bit is obtained (by \emph{ReadBit()}). Additionally we
+      identify the encoding pebble $p_{i}$ as already seen for
+      \emph{ReadBit()} and let be $j = \Thead\mod m_{1}$ the offset of the bit
+      within the memory block. If the bit actually flips the value of the
+      memory block changes by $2^j$ (for the flip from 1 to 0 the value
+      decreases and for the flip from 0 to 1 it increases). Therefore $p_{i}$
+      is put either $2^j$ indices up or down which can be easily done by using
+      \emph{PutPebbleAtId(\dots)}.
   \end{description}
-  These are the procedures used to simulate $M$. We will now discuss the space
-  boundarys and afterwards conclude with showing how the simulation actually
-  operates. Recall that $M$ is a $(s,p,2m)$ pebble machine. For the simulating
-  
-
+  These are the procedures used to simulate $M$'s tape. Furthermore we keep
+  $M$'s states in the state space of the simulation. To conclude the simulation
+  we have to consider what happens if $M$ moves from the current vertex to
+  another vertex $v'$. Then the pebble $p_{tmp}$ is dropped on $v'$ and the
+  pebbles are moved to the same index they have in $\omega$ for a new closed
+  walk $\omega'$ (obtained by $M_{\text{Walk}}$ simulated starting in $v'$;
+  this walk is also ensured to have at least $2^{m_1}$ distinct vertices).
 \end{proof}
+As Theorem \ref{thm:pebblewalk} yields a $(c,0,c\cdot\log n)$ pebble machine
+that explores a given graph we can now repeatedly apply the simulation
+from Theorem \ref{thm:simulation} (precisely $\log\log n$ times) and end up
+with a $(c'^{\log\log n}\cdot c, \log\log n\cdot c',
+\frac{c}{2^{\log\log n}}\log n) =
+(c'^{\log\log n}\cdot c, \log\log n\cdot c', c)$ pebble machine exploring the
+graph.
+
 
 
 \setquotestyle{english}
