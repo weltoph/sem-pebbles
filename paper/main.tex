@@ -9,6 +9,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{todonotes}
+\usepackage{mdframed}
 
 \newtheorem{thm}{Theorem}
 \newtheorem{lem}{Lemma}
@@ -125,6 +126,7 @@ $P_{1}$ and $P_{2}$ are disjoint and furthermore that if the agent leaves
 carrying $P'_{1}$ and leaving $P'_{2}$ behind those sets are disjoint and
 $P_{1}\cup P_{2} = P'_{1}\cup P'_{2}$.
 
+\section{Graph exploration}
 In order to describe the movement of an agent we introduce the notion of an
 exploration sequence as $e_{0}, e_{1},\dots$ which models relative movements
 as follows. We use a sequence of variables $l_{0},l_{1},\dots$ which denotes
@@ -305,7 +307,59 @@ with a $(c'^{\log\log n}\cdot c, \log\log n\cdot c',
 (c'^{\log\log n}\cdot c, \log\log n\cdot c', c)$ pebble machine exploring the
 graph.
 
+\section{Barriers}
+In the following we will discuss the limits of the exploration approach with
+pebbles. Specifically, we will argue that we can construct 3-regular graphs
+that any agent with $p$ pebbles cannot traverse. Such graphs are called
+$p$-barriers.
+Note that connecting a 3-regular graph might violate its 3-regularity.
+Therefore we rely on having a distinguishable edge $e$ in the 3-regular graph
+which we can delete to connect the vertices $e$ connected to the
+\enquote{outside}. This preserves the 3-regularity.
+With a given $p$-barrier $H$ we can construct a trap for an agent with $p$
+pebbles as follows:
+\todo{add picture}
 
+The construction of barriers is inductively and therefore requires that the
+base case can be constructed directly. Fortunately Theorem 4 in \cite{0barrier}
+yields a graph which can be adapted by connecting two identical copies to a
+0-barrier (for details we refer again to \cite{pebbles}). With this in mind we
+introduce a gadget construction for a given $r$-barrier $B$ as it can be seen
+in figure \ref{fig:gadget}\todo{add figure}. Replacing edges of a graph with
+such gadgets enforces, in a sense, \enquote{locality} of pebbles. We call
+the verices that are connected by the gadget macro-vertices and if a $r+1$
+pebble machine stands on a macro vertex we can safely be assured that all
+pebbles are either carried by the agent or are placed within the adjacent
+gadgets because otherwise the agent has left a pebble across of an $r$-barrier
+and crossed the barrier with $r$ pebbles contradicting that it is in fact an
+$r$-barrier. This observation can be used to construct an $r$-barrier given
+a $(r-1)$-barrier is known.
+\begin{thm}
+  With a given $(r-1)$-barrier for an agent $A$ a $r$-barrier can be
+  constructed.
+\end{thm}
+\begin{proof}
+  We will present only the key ideas of this proof since it involves a
+  few technicalities which do not add much to the general understanding
+  and are therefore omitted. Given a subset of pebbles of cardinality $r$
+  we can construct an $r$-barrier for this subset by using the given
+  $(r-1)$-barrier to enforce locality of the pebbles. We can then project
+  $A$'s behaviour to an agent $B$ which is a pebble machine without pebbles
+  and has a state for every configuration (which includes the placing of the
+  pebbles as well as state and tape content) of $A$. $B$ now moves over the
+  macro-vertices as $A$ moves through the gadgets. But $B$ has no pebbles and
+  thus, it is applicable to the 0-barrier. Projecting this construct back to
+  the gadget construction yields an $r$-barrier for $A$ and the chosen subset
+  of pebbles. Connecting now such $r$-barriers for all possible subsets of
+  pebbles gives the desired $r$-barrier because $A$ always fails to traverse
+  the $r$-barrier particular constructed for the pebble set used by $A$.
+\end{proof}
+By constructing such barriers it is possible to find for every agent
+with $s$ states and $p$ pebbles (note that here the tape of the agent is
+encoded in the states) it is possible to give a trap where the amount of
+vertices can be bound by $\mathcal{O}(s^{8^{p+1}})$. Which can be used to
+show that every agent with sub-logarithmic bits of memory needs at least
+$\Omega(\log\log n)$ many pebbles to explore at least $n$ vertices.
 
 \setquotestyle{english}
 \printbibliography
