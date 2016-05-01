@@ -1,0 +1,29 @@
+\usetikzlibrary{patterns, arrows, cd, positioning, backgrounds, fit, decorations.pathmorphing, shapes.misc, calc, matrix, decorations.pathreplacing}
+\tikzset{%
+  node/.style={draw, minimum size=12mm, inner sep=0mm, circle, fill=gray!50},
+  edge/.style={thick},
+  move/.style={->},
+  brace/.style={
+    decorate,
+    decoration={brace,amplitude=10pt,mirror},
+  },
+  table nodes/.style={
+    rectangle,
+    draw=black,
+    align=center,
+    minimum height=7mm,
+    text depth=0.5ex,
+    text height=2ex,
+    inner xsep=0pt,
+    outer sep=0pt
+  },
+  table/.style={
+    matrix of nodes,
+    row sep=\pgflinewidth,
+    column sep=\pgflinewidth,
+    nodes={
+      table nodes
+    }
+  }
+}
+

@@ -10,9 +10,11 @@
 \usepackage{amsthm}
 \usepackage{todonotes}
 \usepackage{mdframed}
+\usepackage{wrapfig}
 
 \newtheorem{thm}{Theorem}
 \newtheorem{lem}{Lemma}
+\newtheorem{ex}{Exercise}
 
 \addbibresource{bibliography.bib}
 
@@ -24,6 +26,8 @@
 \DeclareMathOperator{\Thead}{T_{\text{head}}}
 
 \begin{document}
+
+\input{tikz/settings}
 
 \setlength{\epigraphwidth}{0.7\textwidth}
 \setquotestyle{german}
@@ -174,6 +178,11 @@ are looking for.
   explores every given graph $G$ with bounded degree $\Delta$ either completly
   or at least loops on $n$ distinct vertices.
 \end{thm}
+\begin{wrapfigure}{r}{0.6\textwidth}
+  \caption{Illustration how to transform any graph to a 3-regular graph.}
+  \label{fig:3reg}
+  \resizebox{0.6\textwidth}{!}{\input{tikz/regsim}}
+\end{wrapfigure}
 \begin{proof}
   The main idea is to use the adapted algorithm $A$ to find for an
   universal exploration sequence for a 3-regular graph from above. Therefore
@@ -184,17 +193,15 @@ are looking for.
   circle. Specifically the edge with port $i$ is replaced by 3 edges which are
   attached to $(v,i), (v,i+d), (v,i+2d)$. (Note that the other
   vertex attached to the edge is replaced by the same construction and therfore
-  offers enough ports for the newly introduced edges.) The following picture
-  illustrates this construction:\todo{add picture}
-  
-  This simulation yields at most $3\Delta n^{2}$ many nodes and can be emulated
-  with $\mathcal{O}(1)$ many memory space since it is only needed to store
-  the second component of the inserted nodes which is bounded by $3\Delta$.
-  Furthermore $A$ can be run on this constructed Graph and only needs
-  $\mathcal{0}(\log n)$ space since $\mathcal{O}(\log(3\Delta n^{2})) =
-  \mathcal{O}(\log(3) + \log(\Delta) + 2\log(n)) = \mathcal{O}(\log n)$.
-  Which yields the desired $(\mathcal{O}(1),0,\mathcal{O}(\log n))$ pebble
-  machine.
+  offers enough ports for the newly introduced edges.) Figure \ref{fig:3reg}
+  illustrates this construction.  This simulation yields at most
+  $3\Delta n^{2}$ many nodes and can be emulated with $\mathcal{O}(1)$ many
+  memory space since it is only needed to store the second component of the
+  inserted nodes which is bounded by $3\Delta$. Furthermore $A$ can be run on
+  this constructed Graph and only needs $\mathcal{0}(\log n)$ space since
+  $\mathcal{O}(\log(3\Delta n^{2})) = \mathcal{O}(\log(3) + \log(\Delta) +
+  2\log(n)) = \mathcal{O}(\log n)$. Which yields the desired
+  $(\mathcal{O}(1),0,\mathcal{O}(\log n))$ pebble machine.
 \end{proof}
 
 In order to obtain the desired boundary of $\log\log n$ space and $\log\log n$
@@ -206,6 +213,16 @@ content by pebbles that are placed on a closed walk.
   a $(cs,p + c,m)$ pebble machine that simulates the walk of $M$ or explores
   $G$.
 \end{thm}
+\begin{figure}
+  \caption{Illustration how to simulate the tape of a pebble machine by
+  placing pebbles on a closed walk where $m_{1} = 3$. Note that the first
+  $2^{m_{1}}=2^{3}=8$ distinct vertices are used for the simulation but the
+  walk can be longer (as indicated by the dotted connection from $7$ to $0$).}
+  \label{fig:tapesim}
+  \begin{center}
+    \resizebox{0.6\textwidth}{!}{\input{tikz/tapesim}}
+  \end{center}
+\end{figure}
 \begin{proof}
   In this proof we will focus on the simulation and we leave out a thorough
   analysis of the space requirements of the simulation since it is rather
@@ -229,7 +246,7 @@ content by pebbles that are placed on a closed walk.
   many \enquote{states} for each pebble (by its placement on this closed walk).
   Therefore we can use the binary representation of the indices of the nodes
   on which the pebbles are placed as the content of the encoded memory block.
-  The following picture gives an illustration of this.\todo{add picture}
+  Figure \ref{fig:tapesim} illustrates this.
 
   In the following we show how this simulation can be managed.
   Let $M_{\text{Walk}}$ be pebble machine that yields $\omega$ on $G$.
@@ -315,10 +332,12 @@ $p$-barriers.
 Note that connecting a 3-regular graph might violate its 3-regularity.
 Therefore we rely on having a distinguishable edge $e$ in the 3-regular graph
 which we can delete to connect the vertices $e$ connected to the
-\enquote{outside}. This preserves the 3-regularity.
-With a given $p$-barrier $H$ we can construct a trap for an agent with $p$
-pebbles as follows:
-\todo{add picture}
+\enquote{outside}. This preserves the 3-regularity. The interested reader might
+then enjoy the following exercise:
+\begin{ex}
+  Given a $p$-barrier with $m$ vertices for a agent $A$ with $p$ pebbles.
+  Construct a trap for $A$ (with $2m+4$ vertices). 
+\end{ex}
 
 The construction of barriers is inductively and therefore requires that the
 base case can be constructed directly. Fortunately Theorem 4 in \cite{0barrier}
