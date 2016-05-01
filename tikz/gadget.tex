@@ -1,0 +1,19 @@
+\begin{tikzpicture}
+  \node[node] (0) {$v$};
+  \node[node,above right=of 0] (1) {};
+  \node[node,above left=of 0] (2) {};
+  \node[node,below=of 0] (3) {};
+
+  \draw[edge] (0) to (1);
+  \draw[edge] (0) to (2);
+  \draw[edge] (0) to (3);
+
+  \node[node,below=5cm of 0] (0') {$v$};
+  \node[node,above right=of 0'] (1') {};
+  \node[node,above left=of 0'] (2') {};
+  \node[node,below=of 0'] (3') {};
+
+  \draw[edge,on background layer] (0') to node[draw,midway,fill=gray,shape=rectangle] {$B$} (1');
+  \draw[edge,on background layer] (0') to node[draw,midway,fill=gray,shape=rectangle] {$B$} (2');
+  \draw[edge,on background layer] (0') to node[draw,midway,fill=gray,shape=rectangle] {$B$} (3');
+\end{tikzpicture}

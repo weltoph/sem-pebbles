@@ -87,7 +87,7 @@ considered graphs are assumed to be limited by a constant $\Delta$ and that
 there are only a finite amount of vertices.
 
 \section{Pebble machines}
-We are now ready to introduce the model of pebble machines formally. It closely
+We are now ready to introduce the model of pebble machines. It closely
 follows the notion of Turing machines but adds mechanisms to model the
 movements of the agent. The presented model of pebble machines thus have
 \begin{enumerate}
@@ -178,10 +178,10 @@ are looking for.
   explores every given graph $G$ with bounded degree $\Delta$ either completly
   or at least loops on $n$ distinct vertices.
 \end{thm}
-\begin{wrapfigure}{r}{0.6\textwidth}
+\begin{wrapfigure}{r}{0.5\textwidth}
   \caption{Illustration how to transform any graph to a 3-regular graph.}
   \label{fig:3reg}
-  \resizebox{0.6\textwidth}{!}{\input{tikz/regsim}}
+  \resizebox{0.5\textwidth}{!}{\input{tikz/regsim}}
 \end{wrapfigure}
 \begin{proof}
   The main idea is to use the adapted algorithm $A$ to find for an
@@ -213,16 +213,6 @@ content by pebbles that are placed on a closed walk.
   a $(cs,p + c,m)$ pebble machine that simulates the walk of $M$ or explores
   $G$.
 \end{thm}
-\begin{figure}
-  \caption{Illustration how to simulate the tape of a pebble machine by
-  placing pebbles on a closed walk where $m_{1} = 3$. Note that the first
-  $2^{m_{1}}=2^{3}=8$ distinct vertices are used for the simulation but the
-  walk can be longer (as indicated by the dotted connection from $7$ to $0$).}
-  \label{fig:tapesim}
-  \begin{center}
-    \resizebox{0.6\textwidth}{!}{\input{tikz/tapesim}}
-  \end{center}
-\end{figure}
 \begin{proof}
   In this proof we will focus on the simulation and we leave out a thorough
   analysis of the space requirements of the simulation since it is rather
@@ -247,10 +237,20 @@ content by pebbles that are placed on a closed walk.
   Therefore we can use the binary representation of the indices of the nodes
   on which the pebbles are placed as the content of the encoded memory block.
   Figure \ref{fig:tapesim} illustrates this.
+  \begin{figure}[h!]
+    \caption{Illustration how to simulate the tape of a pebble machine by
+      placing pebbles on a closed walk where $m_{1} = 3$. Note that the first
+      $2^{m_{1}}=2^{3}=8$ distinct vertices are used for the simulation but the
+    walk can be longer (as indicated by the dotted connection from $7$ to $0$).}
+    \label{fig:tapesim}
+    \begin{center}
+      \resizebox{0.6\textwidth}{!}{\input{tikz/tapesim}}
+    \end{center}
+  \end{figure}
 
   In the following we show how this simulation can be managed.
   Let $M_{\text{Walk}}$ be pebble machine that yields $\omega$ on $G$.
-  $M_{\text{Walk}}$ can be implemented as $(\mathcal{O}(1),0,\mathcal{m_1})$
+  $M_{\text{Walk}}$ can be implemented as $(\mathcal{O}(1),0,\mathcal{O}(m_{1}))$
   pebble machine by Theorem \ref{thm:pebblewalk}.
   In order to manage the simulation we use some
   variables: $\Tid, \Tsteps, \Twalk, \Thead$ where $\Tid$ is used to identify
@@ -339,20 +339,24 @@ then enjoy the following exercise:
   Construct a trap for $A$ (with $2m+4$ vertices). 
 \end{ex}
 
+\begin{wrapfigure}{r}{0.4\textwidth}
+  \caption{Gadget construction that ensures locality of pebbles.}
+  \label{fig:gadget}
+  \resizebox{0.4\textwidth}{!}{\input{tikz/gadget}}
+\end{wrapfigure}
 The construction of barriers is inductively and therefore requires that the
 base case can be constructed directly. Fortunately Theorem 4 in \cite{0barrier}
-yields a graph which can be adapted by connecting two identical copies to a
-0-barrier (for details we refer again to \cite{pebbles}). With this in mind we
+yields a graph which can be adapted to a 0-barrier. With this in mind we
 introduce a gadget construction for a given $r$-barrier $B$ as it can be seen
-in figure \ref{fig:gadget}\todo{add figure}. Replacing edges of a graph with
+in Figure \ref{fig:gadget}. Replacing edges of a graph with
 such gadgets enforces, in a sense, \enquote{locality} of pebbles. We call
 the verices that are connected by the gadget macro-vertices and if a $r+1$
 pebble machine stands on a macro vertex we can safely be assured that all
 pebbles are either carried by the agent or are placed within the adjacent
-gadgets because otherwise the agent has left a pebble across of an $r$-barrier
-and crossed the barrier with $r$ pebbles contradicting that it is in fact an
-$r$-barrier. This observation can be used to construct an $r$-barrier given
-a $(r-1)$-barrier is known.
+\enquote{edges} because otherwise the agent has left a pebble across of an
+$r$-barrier and crossed the barrier with $r$ pebbles contradicting that it is
+in fact an $r$-barrier. This observation can be used to construct an
+$r$-barrier given a $(r-1)$-barrier is known.
 \begin{thm}
   With a given $(r-1)$-barrier for an agent $A$ a $r$-barrier can be
   constructed.
@@ -362,7 +366,8 @@ a $(r-1)$-barrier is known.
   few technicalities which do not add much to the general understanding
   and are therefore omitted. Given a subset of pebbles of cardinality $r$
   we can construct an $r$-barrier for this subset by using the given
-  $(r-1)$-barrier to enforce locality of the pebbles. We can then project
+  $(r-1)$-barrier. By the above described gadget construction we can enforce
+  the locality of the used $r$ pebbles. We can then project
   $A$'s behaviour to an agent $B$ which is a pebble machine without pebbles
   and has a state for every configuration (which includes the placing of the
   pebbles as well as state and tape content) of $A$. $B$ now moves over the
@@ -371,7 +376,7 @@ a $(r-1)$-barrier is known.
   the gadget construction yields an $r$-barrier for $A$ and the chosen subset
   of pebbles. Connecting now such $r$-barriers for all possible subsets of
   pebbles gives the desired $r$-barrier because $A$ always fails to traverse
-  the $r$-barrier particular constructed for the pebble set used by $A$.
+  the $r$-barrier particularly constructed for the pebble set used by $A$.
 \end{proof}
 By constructing such barriers it is possible to find for every agent
 with $s$ states and $p$ pebbles (note that here the tape of the agent is
@@ -379,6 +384,14 @@ encoded in the states) it is possible to give a trap where the amount of
 vertices can be bound by $\mathcal{O}(s^{8^{p+1}})$. Which can be used to
 show that every agent with sub-logarithmic bits of memory needs at least
 $\Omega(\log\log n)$ many pebbles to explore at least $n$ vertices.
+
+\section{Conclusion}
+In this paper re-presented the idea of pebble machines for graph exploration
+as discussed in \cite{pebbles}. For this we focused on conwaying the essential
+ideas and constructions rather than explore the technical details. The main
+result clearly is the simulation of memory of pebble machines by encoding
+memory blocks by pebbles and that these pebbles keep a state by their placement
+along a closed walk.
 
 \setquotestyle{english}
 \printbibliography
