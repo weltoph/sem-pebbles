@@ -2,8 +2,12 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage{epigraph}
+\usepackage{tikz}
+
+\input{tikz/settings}
 
 \usetheme{metropolis}
+\metroset{numbering=fraction}
 
 \title{A Grimm idea}
 \subtitle{Exploring graphs with pebbles}
@@ -13,10 +17,76 @@
 \begin{document}
 \maketitle
 \begin{frame}
+  \frametitle{Motivation}
+  \begin{itemize}
+    \item Traversing Brobdingnagian graphs
+    \item[$\rightarrow$] Web crawlers
+    \item Agent moves over vertices along edges
+    \item[$\Rightarrow$] Memory efficient agents
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Agents}
+  \begin{quotation}
+    Und als der volle Mond aufgestiegen war, so nahm Hänsel sein
+    Schwesterchen an der Hand und ging den Kieselsteinen nach, die schimmerten
+    wie neu geschlagene Batzen und zeigten ihnen den Weg.
+  \end{quotation}
+  \vspace{-0.5cm}
+  \flushright{Brüder Grimm}
+  \vspace{-0.5cm}
+  \flushright{\emph{Hänsel und Gretel}}
+  \begin{itemize}
+    \item Agent carries set of markers $\rightarrow$ pebbles
+    \item Leave pebbles on vertices
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Brobdignagian graphs}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{itemize}
+      \item Indistinguishable vertices
+      \item Bounded degree ($\Delta$)
+      \item Edges can locally enumerated $\left\{0,\dots,\Delta-1\right\}$ (Port)
+      \item Agent is aware of:
+        \begin{enumerate}
+          \item Degree  of vertex
+          \item Pebbles placed on vertex
+          \item Pebbles carried by agent
+          \item Port    agent entered vertex
+        \end{enumerate}
+    \end{itemize}
+    \column{0.5\textwidth}
+    \begin{center}
+      \resizebox{\textwidth}{!}{\input{tikz/portex}}
+    \end{center}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Exploration sequence}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{itemize}
+      \item Describe movement of agent by relative turns
+      \item $e_{1},\dots, e_{n}$
+      \item For a vertex $v$ with degree $d_{v}$ which is entered on port $p$
+        is left through port $p + e_{i}\mod p$
+      \item<2->[$\rightarrow$] Example:
+        $\only<3-3>{\colorbox{green}}{1}\;,\only<4-4>{\colorbox{green}}{3}\;,
+        \only<5-5>{\colorbox{green}}{2}\;,\only<6-6>{\colorbox{green}}{2}$
+    \end{itemize}
+    \column{0.5\textwidth}
+    \begin{center}
+      \resizebox{\textwidth}{!}{\input{tikz/moveex}}
+    \end{center}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
   \frametitle{}
-  \epigraph{Und als der volle Mond aufgestiegen war, so nahm Hänsel sein %
-    Schwesterchen an der Hand und ging den Kieselsteinen nach, die schimmerten %
-  wie neu geschlagene Batzen und zeigten ihnen den Weg.}%
-  {\emph{Hänsel und Gretel}\\Brüder Grimm}
 \end{frame}
 \end{document}
