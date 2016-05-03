@@ -1,0 +1,24 @@
+\begin{tikzpicture}
+  \matrix (tape) [table, text width=7mm, name=tape]
+    { 1 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 0 \\};
+
+  \node[above=of tape-1-3.east] (s1) {};
+  \node[below=of tape-1-3.east] (s2) {};
+  \draw[brace] (tape-1-3.north east) -- node[yshift=6mm] {$m_{1} = 3$} (tape-1-1.north west);
+  \draw[dashed] (s1) to (s2);
+
+  \node[above=of tape-1-6.east] (s3) {};
+  \node[below=of tape-1-6.east] (s4) {};
+  \draw[brace] (tape-1-6.north east) -- node[yshift=6mm] {$m_{1} = 3$} (tape-1-4.north west);
+  \draw[dashed] (s3) to (s4);
+
+  \node[above=of tape-1-9.east] (s5) {};
+  \node[below=of tape-1-9.east] (s6) {};
+  \draw[brace] (tape-1-9.north east) -- node[yshift=6mm] {$m_{1} = 3$} (tape-1-7.north west);
+  \draw[dashed] (s5) to (s6);
+
+  \node[above=of tape-1-12.east] (s7) {};
+  \node[below=of tape-1-12.east] (s8) {};
+  \draw[brace] (tape-1-12.north east) -- node[yshift=6mm] {$m_{1} = 3$} (tape-1-10.north west);
+  \draw[dashed] (s7) to (s8);
+\end{tikzpicture}

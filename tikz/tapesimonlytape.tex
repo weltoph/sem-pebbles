@@ -1,0 +1,5 @@
+\begin{tikzpicture}
+  \matrix (tape) [table, text width=7mm, name=tape]
+    { 1 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 0 \\};
+  \draw[brace] (tape-1-1.south west) -- node[yshift=-6mm] {$m = 12$} (tape-1-12.south east); 
+\end{tikzpicture}

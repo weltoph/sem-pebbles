@@ -3,7 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{epigraph}
 \usepackage{tikz}
-\usepackage{todonotes}
+\usepackage{csquotes}
 
 \input{tikz/settings}
 
@@ -113,8 +113,9 @@
   \frametitle{Exploring pebble machine}
   \alt<+>{
     \begin{theorem}[Reingold]
-      There is an algorithm $A$ with $\mathcal{O}(n)$ space requirement producing
-      a universal exploration sequence for every regular graph with $n$ vertices.
+      There is an algorithm $A$ with $\mathcal{O}(n)$ space requirement
+      producing a universal exploration sequence for every regular graph with
+      $n$ vertices.
     \end{theorem}
   }{
     \begin{theorem}
@@ -141,5 +142,30 @@
 
 \begin{frame}
   \frametitle{Tape simulation via pebbles}
+  \begin{itemize}
+    \item Simulate tape of size $m$ by pebbles:
+      \begin{itemize}
+        \item<3-> Separate into memory blocks of size $m_{1}$
+        \item<4-> Represent every block by one of $\left\{p_{0},\dots,p_{\frac{m}{m_{1}-1}}\right\}$ pebbles
+      \end{itemize}
+  \end{itemize}
+  \uncover<2->{\input{tikz/tapesimint}}
 \end{frame}
+
+\begin{frame}
+  \frametitle{Tape simulation via pebbles}
+  \input{tikz/tapesimpebsep}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{itemize}
+      \item Every pebbles needs $2^{m_{1}}$ distinct \enquote{states}
+        \begin{itemize}
+          \item Use placement on a walk with at least $2^{m_{1}}$ distinct vertices
+        \end{itemize}
+    \end{itemize}
+    \column{0.5\textwidth}
+    \resizebox{\textwidth}{!}{\input{tikz/tapesimwalk}}
+  \end{columns}
+\end{frame}
+
 \end{document}

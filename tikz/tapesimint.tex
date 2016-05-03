@@ -1,0 +1,49 @@
+\begin{tikzpicture}
+  \matrix (tape) [table, text width=7mm, name=tape]
+    { 1 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 0 \\};
+
+  \node[above=of tape-1-1.west] (s1) {};
+  \node[below=of tape-1-1.west] (s2) {};
+
+  \node[above=of tape-1-3.east] (s3) {};
+  \node[below=of tape-1-3.east] (s4) {};
+
+  \node[above=of tape-1-6.east] (s5) {};
+  \node[below=of tape-1-6.east] (s6) {};
+
+  \node[above=of tape-1-9.east] (s7) {};
+  \node[below=of tape-1-9.east] (s8) {};
+
+  \node[above=of tape-1-12.east] (s9) {};
+  \node[below=of tape-1-12.east] (s10) {};
+
+  \uncover<2-2>{\draw[brace] (tape-1-12.north east) -- node[yshift=6mm] {$m = 12$} (tape-1-1.north west);}
+  \uncover<3->{\draw[brace] (s9.center) -- node[yshift=6mm] {$m = 12$} (s1.center);}
+
+  \uncover<3->{
+    \draw[dashed] (s1) to (s2);
+    \draw[dashed] (s3) to (s4);
+    \draw[dashed] (s5) to (s6);
+    \draw[dashed] (s7) to (s8);
+    \draw[dashed] (s9) to (s10);
+  }
+
+  \uncover<3-3>{
+    \draw[brace] (tape-1-1.south west) -- node[yshift=-6mm] {$m_{1} = 3$} (tape-1-3.south east);
+
+    \draw[brace] (tape-1-4.south west) -- node[yshift=-6mm] {$m_{1} = 3$} (tape-1-6.south east);
+
+    \draw[brace] (tape-1-7.south west) -- node[yshift=-6mm] {$m_{1} = 3$} (tape-1-9.south east);
+
+    \draw[brace] (tape-1-10.south west) -- node[yshift=-6mm] {$m_{1} = 3$} (tape-1-12.south east);
+  }
+  \uncover<4-4>{
+    \draw[brace] (tape-1-1.south west) -- node[yshift=-6mm]  {$p_{0}$} (tape-1-3.south east);
+
+    \draw[brace] (tape-1-4.south west) -- node[yshift=-6mm]  {$p_{1}$} (tape-1-6.south east);
+
+    \draw[brace] (tape-1-7.south west) -- node[yshift=-6mm]  {$p_{2}$} (tape-1-9.south east);
+
+    \draw[brace] (tape-1-10.south west) -- node[yshift=-6mm] {$p_{3}$} (tape-1-12.south east);
+  }
+\end{tikzpicture}
