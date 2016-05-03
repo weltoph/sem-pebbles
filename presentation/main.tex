@@ -3,6 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{epigraph}
 \usepackage{tikz}
+\usepackage{todonotes}
 
 \input{tikz/settings}
 
@@ -50,7 +51,8 @@
     \begin{itemize}
       \item Indistinguishable vertices
       \item Bounded degree ($\Delta$)
-      \item Edges can locally enumerated $\left\{0,\dots,\Delta-1\right\}$ (Port)
+      \item Edges can locally enumerated $\left\{0,\dots,\Delta-1\right\}$
+        (Port)
       \item Agent is aware of:
         \begin{enumerate}
           \item Degree  of vertex
@@ -87,6 +89,57 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{}
+  \frametitle{Closed walk}
+  \begin{theorem}
+    A exploration sequence $(e_{1},\dots,e_{k})^{\ast}$ produces a closed walk.
+  \end{theorem}
+  \begin{itemize}
+    \item Introduce triple $(v,l,i)$ with vertex $v$ is entered
+      through port $l$ and $e_{i}$ is the next turn
+    \item Note that there is exactly one $(v,l,i) \leadsto (v',l',i')$
+    \item Furthermore assume $t_{1} = (v',l',i') \leadsto (v,l,i)$ and
+      $t_{2} = (v'',l'',i'') \leadsto (v,l,i)$:
+      \begin{itemize}
+        \item $t_{1}$ and $t_{2}$ both entered $v$ through $l$: $v' = v''$
+        \item $t_{1}$ and $t_{2}$ lead that $i$ is the next turn: $i' = i''$
+        \item $l' + e_{i'} \mod d_{v'} = l'' + e_{i''} \mod d_{v''}$ and
+          $l',l''\leq d_{v'} = d_{v''}$: $l' = l''$
+      \end{itemize}
+    \item Only finite triples, thus projection to vertices yields closed walk
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Exploring pebble machine}
+  \alt<+>{
+    \begin{theorem}[Reingold]
+      There is an algorithm $A$ with $\mathcal{O}(n)$ space requirement producing
+      a universal exploration sequence for every regular graph with $n$ vertices.
+    \end{theorem}
+  }{
+    \begin{theorem}
+      Thus, there is $(\mathcal{O}(1), 0, \mathcal{O}(\log n)$ that moves
+      along a closed walk with $n$ distinct vertices (or explores the whole
+      graph).
+    \end{theorem}
+  }
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{itemize}
+      \item<3-> Establish 3-regularity
+        \begin{itemize}
+          \item Transform $v$ to $3\cdot d_{v}$ distinct vertices
+          \item TODO: ADD BOUNDARY
+        \end{itemize}
+      \item<5-> Use $A$ and take first $k = 3n\cdot c$ ($c$ number of
+        configurations $M_{A}$)
+    \end{itemize}
+    \column{0.5\textwidth}
+    \uncover<4->{\resizebox{\textwidth}{!}{\input{tikz/regsim}}}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Tape simulation via pebbles}
 \end{frame}
 \end{document}
