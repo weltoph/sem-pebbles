@@ -10,6 +10,13 @@
 \usetheme{metropolis}
 \metroset{numbering=fraction}
 
+\DeclareMathOperator{\din}{\delta_{\mathit{in}}}
+\DeclareMathOperator{\dout}{\delta_{\mathit{out}}}
+\DeclareMathOperator{\Tid}{T_{\text{id}}}
+\DeclareMathOperator{\Tsteps}{T_{\text{steps}}}
+\DeclareMathOperator{\Twalk}{T_{\text{walk}}}
+\DeclareMathOperator{\Thead}{T_{\text{head}}}
+
 \title{A Grimm idea}
 \subtitle{Exploring graphs with pebbles}
 \author{Christoph Welzel}
@@ -78,8 +85,10 @@
       \item For a vertex $v$ with degree $d_{v}$ which is entered on port $p$
         is left through port $p + e_{i}\mod p$
       \item<2->[$\rightarrow$] Example:
-        $\only<3-3>{\colorbox{green}}{1}\;,\only<4-4>{\colorbox{green}}{3}\;,
-        \only<5-5>{\colorbox{green}}{2}\;,\only<6-6>{\colorbox{green}}{2}$
+        $\alt<3-3>{\colorbox{green}{1}}{\colorbox{white!0}{1}},
+        \alt<4-4>{\colorbox{green}{3}}{\colorbox{white!0}{3}},
+        \alt<5-5>{\colorbox{green}{2}}{\colorbox{white!0}{2}},
+        \alt<6-6>{\colorbox{green}{2}}{\colorbox{white!0}{2}}$
     \end{itemize}
     \column{0.5\textwidth}
     \begin{center}
@@ -119,7 +128,7 @@
     \end{theorem}
   }{
     \begin{theorem}
-      Thus, there is $(\mathcal{O}(1), 0, \mathcal{O}(\log n)$ that moves
+      Thus, there is $(\mathcal{O}(1), 0, \mathcal{O}(\log n))$ that moves
       along a closed walk with $n$ distinct vertices (or explores the whole
       graph).
     \end{theorem}
@@ -167,6 +176,57 @@
     \column{0.5\textwidth}
     \resizebox{\textwidth}{!}{\input{tikz/tapesimwalk}}
   \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mechanisms of simulation}
+  \begin{itemize}
+    \item Simulation of $M_{\text{Walk}}$ which explores at least $2^{m_{1}}$
+      distinct vertices
+    \item Identify \emph{distinct} vertices of the walk
+    \item Read from and write to simulated tape
+    \item Preserve tape content through steps of simulated agent
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Simulation of $M_{\text{Walk}}$}
+  \begin{itemize}
+    \item $M_{\text{Walk}}$ can be implemented as
+      $(\mathcal{O}(1), 0, \mathcal{O}(m_{1}))$ pebble machine
+    \item Used variables:
+      \begin{itemize}
+        \item $\Twalk$: stores $M_{\text{Walk}}$'s tape
+        \item $\Tsteps$: stores number of taken steps
+        \item $\Tid$: stores number of visited distinct vertices
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Finding distinct vertices}
+  Problem: Indistinguishable vertices $\leadsto$ next vertex \enquote{new}?
+  \begin{columns}
+    \column{0.5\textwidth}
+    Solution:
+    \begin{enumerate}
+      \item Execute step
+      \item Drop pebble $p_{\text{tmp}}$
+      \item Store $\Twalk$ in $T'_{\text{walk}}$
+      \item Restart $M_{\text{Walk}}$
+      \item Execute steps until $p_{\text{tmp}}$ is observed
+      \item If $\Twalk = T'_{\text{walk}}$ the vertex is new
+      \item Otherwise start over
+    \end{enumerate}
+    \column{0.5\textwidth}
+    \input{tikz/disvert}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \Huge Thank you for your attention.
+  \end{center}
 \end{frame}
 
 \end{document}
