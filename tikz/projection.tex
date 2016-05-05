@@ -1,0 +1,39 @@
+\begin{tikzpicture}
+  \node[node] (a0) {$m_{0}$};
+  \node[node,right=of a0] (a1) {$m_{1}$};
+
+  \node[node,below=of a0] (b0) {$m_{0}$};
+  \node[node,right=of b0] (b1) {$m_{1}$};
+
+  \begin{scope}[on background layer]
+    \node[fit=(a0)] (dummy1) {};
+    \node[fit=(a1)] (dummy2) {};
+    \node[fit=(b0)] (dummy3) {};
+    \node[fit=(b1)] (dummy4) {};
+  \end{scope}
+
+  \node[rectangle,fill=gray!50, right=0.25 of a0] (b) {$B$};
+
+  \draw[edge] (a0) to (b);
+  \draw[edge] (b) to (a1);
+  \draw[edge] (b0) to (b1);
+
+  \only<1-1> {
+    \begin{scope}[on background layer]
+      \node[fit=(a0),fill=green!50] {};
+      \node[fit=(b0),fill=blue!50] {};
+    \end{scope}
+  }
+  \only<2-2> {
+    \begin{scope}[on background layer]
+      \node[fit=(b),fill=green!50] {};
+      \node[fit=(b1),fill=blue!50] {};
+    \end{scope}
+  }
+  \only<3-3> {
+    \begin{scope}[on background layer]
+      \node[fit=(a1),fill=green!50] {};
+      \node[fit=(b1),fill=blue!50] {};
+    \end{scope}
+  }
+\end{tikzpicture}

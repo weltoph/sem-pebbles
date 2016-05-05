@@ -295,9 +295,9 @@
 \begin{frame}
   \frametitle{Locality gadget}
   \begin{itemize}
-    \item Replace edge by a $p$-barrier
+    \item Replace edge by a $(p-1)$-barrier
     \item Enforce \enquote{locality} of pebbles
-    \item An agent cannot traverse any gadget without all his pebbles
+    \item An agent cannot traverse any gadget without \emph{all} his pebbles
     \item All pebbles of the agent are either carried or placed within the
       adjacent gadgets
   \end{itemize}
@@ -307,7 +307,31 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Barrier construction}
+  \frametitle{Barrier construction: Initial thoughts}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{itemize}
+      \item Consider a subset of pebbles of cardinality $p$
+      \item Use the locality gadget as edges
+      \item Since pebbles are local: enumerate configurations in macro vertex
+        $C_{1},\dots,C_{\alpha}$
+      \item Project $A$ to a agent without pebbles $B$
+      \item $B$ has $\alpha$ states and traverses through macro vertices
+    \end{itemize}
+    \column{0.5\textwidth}
+    \resizebox{\textwidth}{!}{\input{tikz/projection}}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Barrier construction: The real deal}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{itemize}
+      \item $B$ has no pebbles and is therefore prone to a $0$-barrier
+    \end{itemize}
+    \column{0.5\textwidth}
+  \end{columns}
 \end{frame}
 
 \begin{frame}
