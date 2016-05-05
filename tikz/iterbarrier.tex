@@ -1,0 +1,39 @@
+\begin{tikzpicture}
+  \node[node] (b0l0) {};
+  \node[node,below=2 of b0l0] (b0l1) {};
+  \node[node,right=of b0l0] (b0r0) {};
+  \node[node,below=2 of b0r0] (b0r1) {};
+  \node[fit=(b0l0) (b0l1) (b0r0) (b0r1),draw=black,label={90:$H_{1}$}] (b0) {};
+  \draw[dashed, thick] (b0.north) to (b0.south);
+
+  \node[node,right=of b0r0] (b1l0) {};
+  \node[node,below=2 of b1l0] (b1l1) {};
+  \node[node,right=of b1l0] (b1r0) {};
+  \node[node,below=2 of b1r0] (b1r1) {};
+  \node[fit=(b1l0) (b1l1) (b1r0) (b1r1),draw=black,label={90:$H_{2}$}] (b1) {};
+  \draw[dashed, thick] (b1.north) to (b1.south);
+
+  \node[minimum size=12mm,circle,right=of b1r0] (b2l0) {};
+  \node[minimum size=12mm,circle,below=2 of b2l0] (b2l1) {};
+  \node[minimum size=12mm,circle,right=of b2l0] (b2r0) {};
+  \node[minimum size=12mm,circle,below=2 of b2r0] (b2r1) {};
+
+  \node[node,right=of b2r0] (b3l0) {};
+  \node[node,below=2 of b3l0] (b3l1) {};
+  \node[node,right=of b3l0] (b3r0) {};
+  \node[node,below=2 of b3r0] (b3r1) {};
+  \node[fit=(b3l0) (b3l1) (b3r0) (b3r1),draw=black,label={90:$H_{{n}\choose{p}}$}] (b2) {};
+  \draw[dashed, thick] (b1.north) to (b1.south);
+
+  \draw[edge] (b0r0) to (b1l0);
+  \draw[edge] (b0r1) to (b1l1);
+  \draw[dashed] (b1r0) to (b2l0);
+  \draw[dashed] (b1r1) to (b2l1);
+  \draw[dashed] (b2r0) to (b3l0);
+  \draw[dashed] (b2r1) to (b3l1);
+
+  \draw[edge] (b0l0) to (b0l1);
+  \draw[edge] (b3r0) to (b3r1);
+
+  \node[fit=(b0) (b1) (b2), draw=black, label={90:$B$},inner sep=12mm] (b) {};
+\end{tikzpicture}

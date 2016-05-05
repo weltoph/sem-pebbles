@@ -325,13 +325,15 @@
 
 \begin{frame}
   \frametitle{Barrier construction: The real deal}
-  \begin{columns}
-    \column{0.5\textwidth}
-    \begin{itemize}
-      \item $B$ has no pebbles and is therefore prone to a $0$-barrier
-    \end{itemize}
-    \column{0.5\textwidth}
-  \end{columns}
+  \begin{itemize}
+    \item $B$ has no pebbles and is therefore prone to a $0$-barrier
+    \item Apply locality gadget to all edges
+    \item This yields a $p$-barrier for the chosen subset of pebbles
+    \item Iterate $p$-barriers for all possible subsets
+  \end{itemize}
+  \begin{center}
+    \resizebox{0.8\textwidth}{!}{\input{tikz/iterbarrier}}
+  \end{center}
 \end{frame}
 
 \begin{frame}
