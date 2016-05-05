@@ -1,0 +1,12 @@
+\begin{tikzpicture}
+\node[node] (v1) {$v_{1}$};
+\node[node, below=of v1] (v2) {$v_{2}$};
+\draw[edge] (v1) to (v2);
+
+\node[node, right=of v1] (v3) {$v_{3}$};
+\node[node, below=of v3] (v4) {$v_{4}$};
+\draw[edge] (v3) to (v4);
+
+\node[fit=(v1) (v2) (v3) (v4), draw=black] (b) {};
+\draw[dashed, thick] (b.north) to (b.south);
+\end{tikzpicture}

@@ -34,6 +34,7 @@
   \end{itemize}
 \end{frame}
 
+\section{Graph traversial}
 \begin{frame}
   \frametitle{Agents}
   \begin{quotation}
@@ -70,7 +71,7 @@
     \end{itemize}
     \column{0.5\textwidth}
     \begin{center}
-      \resizebox{\textwidth}{!}{\input{tikz/portex}}
+      % \resizebox{\textwidth}{!}{\input{tikz/portex}}
     \end{center}
   \end{columns}
 \end{frame}
@@ -92,7 +93,7 @@
     \end{itemize}
     \column{0.5\textwidth}
     \begin{center}
-      \resizebox{\textwidth}{!}{\input{tikz/moveex}}
+      % \resizebox{\textwidth}{!}{\input{tikz/moveex}}
     \end{center}
   \end{columns}
 \end{frame}
@@ -145,10 +146,11 @@
         configurations $M_{A}$)
     \end{itemize}
     \column{0.5\textwidth}
-    \uncover<4->{\resizebox{\textwidth}{!}{\input{tikz/regsim}}}
+    % \uncover<4->{\resizebox{\textwidth}{!}{\input{tikz/regsim}}}
   \end{columns}
 \end{frame}
 
+\section{Simulation}
 \begin{frame}
   \frametitle{Tape simulation via pebbles}
   \begin{itemize}
@@ -158,12 +160,12 @@
         \item<4-> Represent every block by one of $\left\{p_{0},\dots,p_{\frac{m}{m_{1}-1}}\right\}$ pebbles
       \end{itemize}
   \end{itemize}
-  \uncover<2->{\input{tikz/tapesimint}}
+  % \uncover<2->{\input{tikz/tapesimint}}
 \end{frame}
 
 \begin{frame}
   \frametitle{Tape simulation via pebbles}
-  \input{tikz/tapesimpebsep}
+  % \input{tikz/tapesimpebsep}
   \begin{columns}
     \column{0.5\textwidth}
     \begin{itemize}
@@ -174,7 +176,7 @@
         \end{itemize}
     \end{itemize}
     \column{0.5\textwidth}
-    \resizebox{\textwidth}{!}{\input{tikz/tapesimwalk}}
+    % \resizebox{\textwidth}{!}{\input{tikz/tapesimwalk}}
   \end{columns}
 \end{frame}
 
@@ -194,7 +196,7 @@
   \begin{itemize}
     \item $M_{\text{Walk}}$ can be implemented as
       $(\mathcal{O}(1), 0, \mathcal{O}(m_{1}))$ pebble machine
-    \item Used variables:
+    \item Used variables/pebbles:
       \begin{itemize}
         \item $\Twalk$: stores $M_{\text{Walk}}$'s tape
         \item $\Tsteps$: stores number of taken steps
@@ -220,8 +222,92 @@
       \item Otherwise start over
     \end{enumerate}
     \column{0.5\textwidth}
-    \input{tikz/disvert}
+    % \input{tikz/disvert}
   \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Memory management}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{itemize}
+      \item $\Thead$ stores head position
+      \item $p_{\lfloor\frac{\Thead}{m_{1}}\rfloor}$: pebble of memory block
+      \item $\mathit{off} = \Thead\mod m_{1}$: offset in memory block
+      \item Reading:
+        \begin{itemize}
+          \item Retrieve encoding pebble
+          \item Return bit with offset
+        \end{itemize}
+      \item Writing:
+        \begin{itemize}
+          \item Read bit
+          \item On bit-flip move encoding pebble $2^{\mathit{off}}$ bits up or down
+        \end{itemize}
+    \end{itemize}
+    \column{0.5\textwidth}
+    % \resizebox{\textwidth}{!}{\input{tikz/tapesimpebsep}}
+    % \resizebox{\textwidth}{!}{\input{tikz/tapesimwalk}}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Memory management: Writing}
+  \begin{itemize}
+    \item Read bit
+    \item On bit-flip: move pebble
+  \end{itemize}
+  % \resizebox{\textwidth}{!}{\input{tikz/bitwrite}}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Simulation}
+  \begin{theorem}
+    For every graph $G$ a $(s,p,2m)$ pebble machine $M$ can be simulated by a
+    $(cs,p+c,m)$ pebble machine that simulates the walk of $M$ on $G$ or
+    explores $G$.
+  \end{theorem}
+  \begin{itemize}
+    \item There is a $(c,0,c\cdot\log n)$ pebble machine which explores
+      a graph $G$ with $n$ vertices
+    \item Applying above simulation $\log \log n$ times yields:
+      \begin{theorem}
+        For every Graph $G$ with $n$ vertices there is a
+        $(c'^{\log\log n}\cdot c, \log\log n\cdot c', c)$ pebble machine
+        which explores $G$.
+      \end{theorem}
+  \end{itemize}
+\end{frame}
+
+\section{Limitations of pebble machines}
+\begin{frame}
+  \frametitle{Limitations of pebbles}
+  \begin{itemize}
+    \item Construct graphs which cannot be traversed by agents with $p$ pebbles
+    \item Such graphs are called $p$-barriers
+      \begin{center}
+        \resizebox{0.3\textwidth}{!}{\input{tikz/barrier}}
+      \end{center}
+    \item In the following: inductive construction of barriers
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Locality gadget}
+  \begin{itemize}
+    \item Replace edge by a $p$-barrier
+    \item Enforce \enquote{locality} of pebbles
+    \item An agent cannot traverse any gadget without all his pebbles
+    \item All pebbles of the agent are either carried or placed within the
+      adjacent gadgets
+  \end{itemize}
+  \begin{center}
+    \uncover<2->{\resizebox{0.8\textwidth}{!}{\input{tikz/locgadget}}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Barrier construction}
 \end{frame}
 
 \begin{frame}
