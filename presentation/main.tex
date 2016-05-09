@@ -5,6 +5,7 @@
 \usepackage{tikz}
 \usepackage{csquotes}
 \usepackage{xcolor}
+\usepackage{amssymb}
 
 \input{tikz/settings}
 
@@ -141,7 +142,7 @@
 \end{frame}
 \begin{frame}
   \frametitle{Closed walk}
-  \begin{lemma}
+  \begin{lemma}[Closed walk]
     An agent following an exploration sequence of the form
     $(e_{1},\dots,e_{k})^{\ast}$ moves along a closed walk.
   \end{lemma}
@@ -161,7 +162,7 @@
 
 \begin{frame}
   \frametitle{Universal exploration of $3$-regular graphs}
-  \begin{lemma}
+  \begin{lemma}[Periodic exploration sequence (PES-Lemma)]
     There exists an $\mathcal{O}(\log n)$-space algorithm producing a universal
     exploration sequence $(e_{1},\dots,e_{k})^{\ast}$ for any $3$-regular graph
     with at most $n$ vertices.
@@ -183,40 +184,67 @@
       }{
       \item Produce a periodic universal exploration sequence
         $(e_{1},\dots,e_{k})^{\ast}$
-        \begin{itemize}
-          \item Construct $\mathcal{M}'$ which simulates $\mathcal{M}$ for
-            $3n\cdot c$ steps where $c$ is the number of configurations of $M$
-          \item Output $e = (e_{1},\dots,e_{k})^{\ast}$
-          \item Assume $e$ is not universal; then it loops in $V'$ with
-            $|V'|<n$
-          \item $\mathcal{M}$ has to enter a vertex twice with the same
-            configuration
-          \item Contradicts universality of the exploration sequence of
-            $\mathcal{M}$
-        \end{itemize}
+        \uncover<2-2>{
+          \begin{itemize}
+            \item Construct $\mathcal{M}'$ which simulates $\mathcal{M}$ for
+              $3n\cdot c$ steps where $c$ is the number of configurations of
+              $M$
+            \item Output $e = (e_{1},\dots,e_{k})^{\ast}$
+            \item Assume $e$ is not universal; then it loops in $V'$ with
+              $|V'|<n$
+            \item $\mathcal{M}$ has to enter a vertex twice with the same
+              configuration
+            \item Contradicts universality of the exploration sequence of
+              $\mathcal{M}$
+          \end{itemize}
+        }
       }
   \end{itemize}
+  \pause
   \pause
 \end{frame}
 
 \begin{frame}
-  \frametitle{Exploring pebble machine}
+  \frametitle{3-Regularity}
   \begin{columns}
     \column{0.5\textwidth}
     \begin{itemize}
-      \item<2-> Establish 3-regularity
+      \item Establish 3-regularity
         \begin{itemize}
-          \item Transform $v$ to $3\cdot d_{v}$ distinct vertices
+          \item Recall: \parbox{3\baselineskip}{\resizebox{!}
+            {3\baselineskip}{\input{tikz/blowup}}}
+          \item<2-> Transform $v$ to $3\cdot d_{v}$ distinct vertices
         \end{itemize}
-      \item<4-> Use Reingold's algorithm and take first $k = 3n\cdot c$ ($c$ number of
-        configurations $M_{A}$)
     \end{itemize}
     \column{0.5\textwidth}
     \uncover<3->{\resizebox{\textwidth}{!}{\input{tikz/regsim}}}
   \end{columns}
 \end{frame}
 
-\section{Simulation}
+\begin{frame}
+  \frametitle{Exploring pebble machine}
+  \begin{itemize}
+    \item Graph $G$
+    \item Transform to 3-regular $G_{\text{reg}}$
+    \item Applying PES-Lemma to $G_{\text{reg}}$ yields:
+  \end{itemize}
+  \begin{theorem}
+    There exists a $(\mathcal{O}(1), 0, \mathcal{O}(\log n))$-pebble machine
+    that moves along a closed walk and either explores the graph or visits at
+    least $n$ distinct vertices, for any graph with bounded degree.
+  \end{theorem}
+\end{frame}
+
+\section{Pebble simulation}
+\begin{frame}
+  \begin{theorem}
+    There is a constant $c\in\mathcal{N}$, such that for any Graph $G$
+    with bounded degree and any $(s,p,2m)$ pebble machine $\mathcal{M}$, there
+    exists a $(cs,p+c,m)$ pebble machine $\mathcal{M}'$ that simulates the walk
+    of $\mathcal{M}$ or explores $G$.
+  \end{theorem}
+\end{frame}
+
 \begin{frame}
   \frametitle{Tape simulation via pebbles}
   \begin{itemize}
@@ -327,20 +355,48 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Simulation}
-  \begin{theorem}
-    For every graph $G$ a $(s,p,2m)$ pebble machine $M$ can be simulated by a
-    $(cs,p+c,m)$ pebble machine that simulates the walk of $M$ on $G$ or
-    explores $G$.
-  \end{theorem}
+  \frametitle{Transfer tape-content through movements}
+  \begin{itemize}
+    \item Simulated machine moves
+    \item Preserve tape-content:
+      \begin{itemize}
+        \item Drop $p_{\text{next}}$ on next vertex
+        \item Transfer encoding pebbles onto walk $\omega'$ starting from
+          next vertex
+        \item Preserve \enquote{state} by placing at same index
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Recall: Mechanisms of simulation}
+  \begin{itemize}
+    \item Simulation of $M_{\text{Walk}}$ which explores at least $2^{m_{1}}$
+      distinct vertices \uncover<2->{\checkmark}
+    \item Identify \emph{distinct} vertices of the walk \uncover<3->{\checkmark}
+    \item Read from and write to simulated tape \uncover<4->{\checkmark}
+    \item Preserve tape content through steps of simulated agent \uncover<5->{\checkmark}
+  \end{itemize}
+  \uncover<6->{
+    \begin{theorem}
+      There is a constant $c\in\mathcal{N}$, such that for any Graph $G$
+      with bounded degree and any $(s,p,2m)$ pebble machine $\mathcal{M}$, there
+      exists a $(cs,p+c,m)$ pebble machine $\mathcal{M}'$ that simulates the walk
+      of $\mathcal{M}$ or explores $G$.
+    \end{theorem}
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{Exploring graphs with $\log\log n$ pebbles}
   \begin{itemize}
     \item There is a $(c,0,c\cdot\log n)$ pebble machine which explores
       a graph $G$ with $n$ vertices
-    \item Applying above simulation $\log \log n$ times yields:
+    \item Applying above simulation $\log \log n$ times yields
+      $(c'^{\log\log n}\cdot c, c'\cdot\log\log n, c)$ pebble machine
       \begin{theorem}
-        For every Graph $G$ with $n$ vertices there is a
-        $(c'^{\log\log n}\cdot c, \log\log n\cdot c', c)$ pebble machine
-        which explores $G$.
+        Any bounded-degree graph on at most $n$ vertices can be explored using
+        $\mathcal{O}(\log\log n)$ pebbles and memory.
       \end{theorem}
   \end{itemize}
 \end{frame}
