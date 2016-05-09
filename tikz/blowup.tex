@@ -1,0 +1,31 @@
+\begin{tikzpicture}
+  \node[node] (m) {};
+  \node[above=of m] (d1) {};
+  \node[below right=of m] (d2) {};
+  \node[below left =of m] (d3) {};
+
+  \node[right=1.5 of m] (as) {};
+
+  \draw[dotted] (m) to (d1);
+  \draw[dotted] (m) to (d2);
+  \draw[dotted] (m) to (d3);
+
+  \node[right=6 of m] (dm) {};
+  \node[node,above=0.5 of dm] (m1) {};
+  \node[node,below left =0.5 and 0.5 of dm] (m2) {};
+  \node[node,below right=0.5 and 0.5 of dm] (m3) {};
+  \node[above=of m1] (dd1) {};
+  \node[below left =of m2] (dd2) {};
+  \node[below right=of m3] (dd3) {};
+
+  \node[left=1.5 of dm] (ae) {};
+
+  \draw[decorate,decoration={snake, amplitude=0.2cm, segment length=1cm},->] (as) to (ae);
+
+  \draw (m1) to (m2);
+  \draw (m2) to (m3);
+  \draw (m3) to (m1);
+  \draw[dotted] (m1) to (dd1);
+  \draw[dotted] (m2) to (dd2);
+  \draw[dotted] (m3) to (dd3);
+\end{tikzpicture}
