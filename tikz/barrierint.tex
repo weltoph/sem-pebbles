@@ -1,0 +1,28 @@
+\begin{tikzpicture}
+\node[node] (v1) {$v_{1}$};
+\node[node, below=of v1] (v2) {$v_{2}$};
+
+\node[node, right=of v1] (v3) {$v_{3}$};
+\node[node, below=of v3] (v4) {$v_{4}$};
+
+\node[fit=(v1) (v2) (v3) (v4), draw=black] (b) {};
+\draw[dashed, thick] (b.north) to (b.south);
+
+\only<1>{
+  \draw[edge] (v1) to (v2);
+  \draw[edge] (v3) to (v4);
+}
+
+\uncover<2>{
+  \node[left=3 of v1] (d1) {};
+  \node[left=2 of d1] (d3) {};
+  \node[left=3 of v2] (d2) {};
+  \node[left=2 of d2] (d4) {};
+  \node[fit=(d1) (d2) (d3) (d4), draw=black, rectangle] (g) {};
+  \node[below left=0.75 of d1] (G) {$G$};
+  \draw[bend right] (v1) to (d1);
+  \draw[bend right] (v3) to (d3);
+  \draw[bend right] (v2) to (d2);
+  \draw[bend right] (v4) to (d4);
+}
+\end{tikzpicture}

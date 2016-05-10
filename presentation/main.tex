@@ -238,7 +238,7 @@
 \section{Pebble simulation}
 \begin{frame}
   \begin{theorem}
-    There is a constant $c\in\mathcal{N}$, such that for any Graph $G$
+    There is a constant $c\in\mathbb{N}$, such that for any Graph $G$
     with bounded degree and any $(s,p,2m)$ pebble machine $\mathcal{M}$, there
     exists a $(cs,p+c,m)$ pebble machine $\mathcal{M}'$ that simulates the walk
     of $\mathcal{M}$ or explores $G$.
@@ -251,7 +251,8 @@
     \item Simulate tape of size $m$ by pebbles:
       \begin{itemize}
         \item<3-> Separate into memory blocks of size $m_{1}$
-        \item<4-> Represent every block by one of $\left\{p_{0},\dots,p_{\frac{m}{m_{1}}-1}\right\}$ pebbles
+        \item<4-> Represent every block by one of
+          $p_{0},\dots,p_{\frac{m}{m_{1}}-1}$ pebbles
       \end{itemize}
   \end{itemize}
   \uncover<2->{\input{tikz/tapesimint}}
@@ -336,7 +337,8 @@
       \item Writing:
         \begin{itemize}
           \item Read bit
-          \item On bit-flip move encoding pebble $2^{\mathit{off}}$ bits up or down
+          \item On bit-flip move encoding pebble $2^{\mathit{off}}$ bits up or
+            down
         \end{itemize}
     \end{itemize}
     \column{0.5\textwidth}
@@ -373,16 +375,18 @@
   \begin{itemize}
     \item Simulation of $M_{\text{Walk}}$ which explores at least $2^{m_{1}}$
       distinct vertices \uncover<2->{\checkmark}
-    \item Identify \emph{distinct} vertices of the walk \uncover<3->{\checkmark}
+    \item Identify \emph{distinct} vertices of the walk
+      \uncover<3->{\checkmark}
     \item Read from and write to simulated tape \uncover<4->{\checkmark}
-    \item Preserve tape content through steps of simulated agent \uncover<5->{\checkmark}
+    \item Preserve tape content through steps of simulated agent
+      \uncover<5->{\checkmark}
   \end{itemize}
   \uncover<6->{
     \begin{theorem}
-      There is a constant $c\in\mathcal{N}$, such that for any Graph $G$
-      with bounded degree and any $(s,p,2m)$ pebble machine $\mathcal{M}$, there
-      exists a $(cs,p+c,m)$ pebble machine $\mathcal{M}'$ that simulates the walk
-      of $\mathcal{M}$ or explores $G$.
+      There is a constant $c\in\mathbb{N}$, such that for any Graph $G$
+      with bounded degree and any $(s,p,2m)$ pebble machine $\mathcal{M}$,
+      there exists a $(cs,p+c,m)$ pebble machine $\mathcal{M}'$ that simulates
+      the walk of $\mathcal{M}$ or explores $G$.
     \end{theorem}
   }
 \end{frame}
@@ -405,12 +409,15 @@
 \begin{frame}
   \frametitle{Limitations of pebbles}
   \begin{itemize}
-    \item Construct graphs which cannot be traversed by agents with $p$ pebbles
+    \item Construct 3-regular graphs which cannot be traversed by an agent
+      $\mathcal{A}$ with $p$ pebbles
     \item Such graphs are called $p$-barriers
       \begin{center}
-        \resizebox{0.3\textwidth}{!}{\input{tikz/barrier}}
+        \resizebox{0.7\textwidth}{!}{\input{tikz/barrierint}}
       \end{center}
-    \item In the following: inductive construction of barriers
+    \item If $\mathcal{A}$ starts in any vertex in $G$ it will never traverse
+      the barrier from $v_{1}$ ($v_{2}$) to $v_{2}$ or $v_{3}$ using at most
+      $p$ pebbles
   \end{itemize}
 \end{frame}
 
