@@ -397,7 +397,8 @@
     \item There is a $(c,0,c\cdot\log n)$ pebble machine which explores
       a graph $G$ with $n$ vertices
     \item Applying above simulation $\log \log n$ times yields
-      $(c'^{\log\log n}\cdot c, c'\cdot\log\log n, c)$ pebble machine
+      $(c'^{\log\log n}\cdot c, c'\cdot\log\log n, c)$ pebble machine exploring
+      $G$
       \begin{theorem}
         Any bounded-degree graph on at most $n$ vertices can be explored using
         $\mathcal{O}(\log\log n)$ pebbles and memory.
@@ -413,11 +414,11 @@
       $\mathcal{A}$ with $p$ pebbles
     \item Such graphs are called $p$-barriers
       \begin{center}
-        \resizebox{0.7\textwidth}{!}{\input{tikz/barrierint}}
+        \resizebox{0.6\textwidth}{!}{\input{tikz/barrierint}}
       \end{center}
-    \item If $\mathcal{A}$ starts in any vertex in $G$ it will never traverse
-      the barrier from $v_{1}$ ($v_{2}$) to $v_{2}$ or $v_{3}$ using at most
-      $p$ pebbles
+    \item $\mathcal{A}$ cannot traverse a barrier from $v_{1}$ or $v_{2}$
+      to $v_{3}$ or $v_{4}$ or vice versa using at most $p$ pebbles
+    \item Inductive construction of barriers
   \end{itemize}
 \end{frame}
 
@@ -429,10 +430,24 @@
     \item An agent cannot traverse any gadget without \emph{all} his pebbles
     \item All pebbles of the agent are either carried or placed within the
       adjacent gadgets
+      \begin{center}
+        \uncover<2->{\resizebox{0.8\textwidth}{!}{\input{tikz/locgadget}}}
+      \end{center}
+    \item<3-> Original vertices are called \emph{macro} vertices
   \end{itemize}
-  \begin{center}
-    \uncover<2->{\resizebox{0.8\textwidth}{!}{\input{tikz/locgadget}}}
-  \end{center}
+\end{frame}
+
+\begin{frame}
+  \begin{theorem}
+    Given an $(r-1)$-barrier $B$ with $m$ vertices for an agent $\mathcal{A}$
+    with $p\geq r$ pebbles, we can construct an $r$-barrier $B'$ with
+    $\mathcal{O}(\binom{p}{r}\cdot m\cdot\alpha_{B}^{2})$ vertices for
+    $\mathcal{A}$.
+  \end{theorem}
+  \begin{itemize}
+    \item $\alpha_{B}$ is the amount of \enquote{local} configurations for
+      $\mathcal{A}$ with $r$ pebbles
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -440,7 +455,7 @@
   \begin{columns}
     \column{0.5\textwidth}
     \begin{itemize}
-      \item Consider a subset of pebbles of cardinality $p$
+      \item Consider a subset of pebbles of cardinality $r$
       \item Use the locality gadget as edges
       \item Since pebbles are local: enumerate configurations in macro vertex
         $C_{1},\dots,C_{\alpha}$
@@ -453,16 +468,72 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Barrier construction: The real deal}
+  \frametitle{Barrier construction}
   \begin{itemize}
     \item $B$ has no pebbles and is therefore prone to a $0$-barrier
     \item Apply locality gadget to all edges
     \item This yields a $p$-barrier for the chosen subset of pebbles
     \item Iterate $p$-barriers for all possible subsets
+      \begin{center}
+        \resizebox{0.7\textwidth}{!}{\input{tikz/iterbarrier}}
+      \end{center}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Barrier base case}
+  \begin{theorem}
+    For any $q$ non cooperative $s$-state agents without pebbles, there
+    exists a 3-regular graph $G$ on $\mathcal{O}(qs)$ vertices with the
+    following property: There are two edges $\left\{v_{1},v_{2}\right\}$
+    and $\left\{v_{3},v_{4}\right\}$ in $G$, the first labeled 0, such
+    that any of the $q$ agents starting in $v_{1}$ or $v_{2}$ does not
+    traverse the edge $\left\{v_{3},v_{4}\right\}$.
+  \end{theorem}
+  \begin{itemize}
+    \item For agent $\mathcal{A}$ consider
+      $S = \left\{\mathcal{A}_{q}\mid q\in Q\right\}$
+    \item Since $|S| = |Q| = q$ there is a 0-barrier with $\mathcal{O}(s^{2})$
+      vertices
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Barrier}
+  \begin{theorem}
+    Given an $(r-1)$-barrier $B$ with $m$ vertices for an agent $\mathcal{A}$
+    with $p\geq r$ pebbles, we can construct an $r$-barrier $B'$ with
+    $\mathcal{O}(\binom{p}{r}\cdot m\cdot\alpha_{B}^{2})$ vertices for
+    $\mathcal{A}$.
+  \end{theorem}
+  \begin{center}
+    \resizebox{0.7\textwidth}{!}{\input{tikz/iterbarrier}}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Barrier size}
+  \begin{itemize}
+    \item Iterative construction
   \end{itemize}
   \begin{center}
-    \resizebox{0.8\textwidth}{!}{\input{tikz/iterbarrier}}
+    \resizebox{0.8\textwidth}{!}{\input{tikz/barriersize}}
   \end{center}
+  \begin{theorem}
+    For $r\leq p$ and $s\geq 2^{p}$, the number of vertices of $r$-barrier
+    $B_{r}$ for the $s$-state agent $\mathcal{A}$ with $p$ pebbles is bounded
+    by $\mathcal{O}(s^{8^{r+1}})$.
+  \end{theorem}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Lower pebble bound}
+  \begin{theorem}
+    For any constant $\epsilon > 0$, an agent with at most
+    $\mathcal{O}((\log n)^{1-\epsilon})$ bits of memory needs at least
+    $\Omega(\log\log n)$ distinguishable pebbles for exploring all
+    graphs on at most $n$ vertices.
+  \end{theorem}
 \end{frame}
 
 \begin{frame}
