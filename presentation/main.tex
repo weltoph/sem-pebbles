@@ -6,6 +6,7 @@
 \usepackage{csquotes}
 \usepackage{xcolor}
 \usepackage{amssymb}
+\usepackage{mdframed}
 
 \input{tikz/settings}
 
@@ -30,10 +31,9 @@
 \begin{frame}
   \frametitle{Motivation}
   \begin{itemize}
-    \item Exploration of huge finite graphs with bounded degree by agents
-    \item Agents are entities which are located on a vertex and can move along
-      an edge
-    \item Agents can drop markers on vertices
+    \item Exploration of huge finite graphs by agents
+    \item Agents are located on a vertex and move along edges
+    \item Agents can drop pebbles on vertices
     \item Agent \emph{explores} a graph by deterministically visiting all of
       its vertices
   \end{itemize}
@@ -43,14 +43,21 @@
 \begin{frame}
   \frametitle{Huge graphs}
   \begin{columns}
-    \column{0.5\textwidth}
+    \column{0.55\textwidth}
     \begin{itemize}
       \item Finite, but huge
       \item Undirected
-      \item Indistinguishable vertices
+      \item Indistinguishable vertices:
+      \parbox{\baselineskip}{
+        \resizebox{!}{\baselineskip}{
+          \begin{tikzpicture}
+            \node[node] {};
+          \end{tikzpicture}
+        }
+      }
       \item Bounded degree ($\Delta$)
-      \item Edges can locally be enumerated as $0,\dots,\Delta-1$
-        (Port)
+      \item Edges can locally be labeled with
+        \textcolor{green}{$0,\dots,\Delta-1$} (Port)
     \end{itemize}
     \column{0.5\textwidth}
     \begin{center}
@@ -68,25 +75,23 @@
       \item Formalisation as pebble-machines
         \begin{itemize}
           \item $(Q,F,P,m,\delta,\din,\dout,q_{0})$
-          \item $P$: set of pebbles
-          \item $m$: length of the used memory tape
-          \item $\din$: formalisation of agent entering
-          \item $\dout$ formalisation of agent leaving
+          \item<2-> $\din$: moving onto vertex
+          \item<7-> $\dout$: leaving vertex
         \end{itemize}
     \end{itemize}
     \column{0.5\textwidth}
     \begin{itemize}
-      \item As an agent moves on a vertex it observes:
+      \item<3-> As an agent moves onto a vertex it observes:
         \begin{itemize}
-          \item Pebbles it carries
-          \item Pebbles lying on the vertex
-          \item Degree of vertex
+          \item<4-> Pebbles it carries
+          \item<5-> Pebbles on the vertex
+          \item<6-> Degree of vertex
         \end{itemize}
-      \item Agent executes a computation on a vertex to determine:
+      \item<8-> Computation on a vertex determines:
         \begin{itemize}
-          \item Port to leave
-          \item Pebbles to leave behind
-          \item Pebbles to carry with it
+          \item<9-> Port to leave
+          \item<10-> Pebbles to drop
+          \item<11-> Pebbles to carry along
         \end{itemize}
     \end{itemize}
   \end{columns}
@@ -98,19 +103,16 @@
   \begin{columns}
     \column{0.5\textwidth}
     \begin{itemize}
-      \item Describe movement of agent by relative movements:
-        \begin{itemize}
-          \item An exploration sequence has the form $e_{1},\dots, e_{n}$
-          \item For a vertex $v$ with degree $d_{v}$ which is entered on port
-            $p$ is left through port $p + e_{i}\mod d_{v}$
-          \item An exploration sequence is called \emph{universial} for a class
-            of graphs if following it explores any graph of that class
-          \item<2->[$\rightarrow$] Example:
-            $\alt<3-3>{\colorbox{green}{1}}{\colorbox{white!0}{1}},
-            \alt<4-4>{\colorbox{green}{3}}{\colorbox{white!0}{3}},
-            \alt<5-5>{\colorbox{green}{2}}{\colorbox{white!0}{2}},
-            \alt<6-6>{\colorbox{green}{2}}{\colorbox{white!0}{2}}$
-        \end{itemize}
+      \item Exploration sequence $e_{1},\dots, e_{n}$
+      \item Relative movements of agent
+      \item Leaving port: $\ell_{i} + e_{i}\mod d_{v}$
+      \item \emph{Universial} for a class of graphs if it explores any graph of
+        that class
+      \item<2->[$\rightarrow$] Example:
+        $\alt<3-3>{\colorbox{green}{1}}{\colorbox{white!0}{1}},
+        \alt<4-4>{\colorbox{green}{3}}{\colorbox{white!0}{3}},
+        \alt<5-5>{\colorbox{green}{2}}{\colorbox{white!0}{2}},
+        \alt<6-6>{\colorbox{green}{2}}{\colorbox{white!0}{2}}$
     \end{itemize}
     \column{0.5\textwidth}
     \begin{center}
@@ -130,8 +132,19 @@
     \begin{tikzpicture}
       \node (d1) {};
       \node[below=2 of d1] (d2) {};
-      \draw[decorate,decoration={snake,amplitude=0.3cm, segment length=1cm},->]
-        (d1) to (d2);
+      \draw[->, bend right] (d1) to (d2);
+      \uncover<2->{
+        \node[rectangle, draw=green, below right=0.3 and 1 of d1]
+        {3-Regularity};
+      }
+      \uncover<3->{
+        \node[rectangle, draw=blue, below right=1 and 1.2 of d1]
+        {Periodic Universal lemma};
+      }
+      \uncover<4->{
+        \node[rectangle, draw=yellow, below right=1.7 and 1 of d1]
+        {Closed walk lemma};
+      }
     \end{tikzpicture}
   \end{center}
   \begin{theorem}
@@ -140,94 +153,55 @@
     least $n$ distinct vertices, for any graph with bounded degree.
   \end{theorem}
 \end{frame}
-\begin{frame}
-  \frametitle{Closed walk}
-  \begin{lemma}[Closed walk]
-    An agent following an exploration sequence of the form
-    $(e_{1},\dots,e_{k})^{\ast}$ moves along a closed walk.
-  \end{lemma}
-  \begin{itemize}
-    \item Examine triples $(v,\ell,i)$:
-      \begin{itemize}
-        \item $v$: current vertex
-        \item $\ell$: port agent entered $v$ through
-        \item $i$: next step of the exploration sequence
-      \end{itemize}
-    \item Deterministically $(v,\ell,i) \leadsto (v',\ell',i')$
-    \item If $t_{1} = (v',\ell',i') \leadsto (v,\ell,i)$ and
-      $t_{2} = (v'',\ell'',i'') \leadsto (v,\ell,i)$: $t_{1} = t_{2}$
-    \item Only finite triples: projection to vertices yields closed walk
-  \end{itemize}
-\end{frame}
 
 \begin{frame}
-  \frametitle{Universal exploration of $3$-regular graphs}
-  \begin{lemma}[Periodic exploration sequence (PES-Lemma)]
-    There exists an $\mathcal{O}(\log n)$-space algorithm producing a universal
-    exploration sequence $(e_{1},\dots,e_{k})^{\ast}$ for any $3$-regular graph
-    with at most $n$ vertices.
-  \end{lemma}
-  \begin{itemize}
-    \item Let $\mathcal{M}$ be the Turing machine from Reingold's Theorem
-    \item The exploration sequence computed by $\mathcal{M}$ is universial for
-      3-regular graphs with at most $n$ vertices
-      \alt<1-1>{
-        \begin{itemize}
-          \item Assume $3$-regular $G_{0}$ with $n_{0} < n$ vertices is not
-            explored
-          \item Then there is a vertex that is not traversed
-          \item Repeatedly apply \parbox{3\baselineskip}{\resizebox{!}
-            {3\baselineskip}{\input{tikz/blowup}}}
-          \item Until there are $n$ vertices which contradicts Reingold's
-            Theorem
-        \end{itemize}
-      }{
-      \item Produce a periodic universal exploration sequence
-        $(e_{1},\dots,e_{k})^{\ast}$
-        \uncover<2-2>{
-          \begin{itemize}
-            \item Construct $\mathcal{M}'$ which simulates $\mathcal{M}$ for
-              $3n\cdot c$ steps where $c$ is the number of configurations of
-              $M$
-            \item Output $e = (e_{1},\dots,e_{k})^{\ast}$
-            \item Assume $e$ is not universal; then it loops in $V'$ with
-              $|V'|<n$
-            \item $\mathcal{M}$ has to enter a vertex twice with the same
-              configuration
-            \item Contradicts universality of the exploration sequence of
-              $\mathcal{M}$
-          \end{itemize}
-        }
-      }
-  \end{itemize}
-  \pause
-  \pause
+  \frametitle{Closed walk}
+  \begin{mdframed}[linecolor=yellow]
+    \begin{lemma}[Closed walk]
+      An agent following an exploration sequence of the form
+      $(e_{1},\dots,e_{k})^{\ast}$ moves along a closed walk.
+    \end{lemma}
+  \end{mdframed}
+  \uncover<2->{
+    \begin{mdframed}[linecolor=blue]
+      \begin{lemma}[Periodic exploration sequence (PES-Lemma)]
+        There exists an $\mathcal{O}(\log n)$-space algorithm producing a
+        universal exploration sequence $(e_{1},\dots,e_{k})^{\ast}$ for any
+        $3$-regular graph with at most $n$ vertices.
+      \end{lemma}
+    \end{mdframed}
+  }
 \end{frame}
 
 \begin{frame}
   \frametitle{3-Regularity}
-  \begin{columns}
-    \column{0.5\textwidth}
-    \begin{itemize}
-      \item Establish 3-regularity
-        \begin{itemize}
-          \item Recall: \parbox{3\baselineskip}{\resizebox{!}
-            {3\baselineskip}{\input{tikz/blowup}}}
-          \item<2-> Transform $v$ to $3\cdot d_{v}$ distinct vertices
-        \end{itemize}
-    \end{itemize}
-    \column{0.5\textwidth}
-    \uncover<3->{\resizebox{\textwidth}{!}{\input{tikz/regsim}}}
-  \end{columns}
+  \begin{mdframed}[linecolor=green]
+    Establish 3-regularity
+  \end{mdframed}
+  \begin{center}
+    \uncover<2->{\resizebox{0.7\textwidth}{!}{\input{tikz/regsim}}}
+  \end{center}
 \end{frame}
 
 \begin{frame}
   \frametitle{Exploring pebble machine}
-  \begin{itemize}
-    \item Graph $G$
-    \item Transform to 3-regular $G_{\text{reg}}$
-    \item Applying PES-Lemma to $G_{\text{reg}}$ yields:
-  \end{itemize}
+  \begin{theorem}[Reingold]
+    There is an $\mathcal{O}(n)$-space algorithm producing a universal
+    exploration sequence for any regular graph on $n$ vertices.
+  \end{theorem}
+  \begin{center}
+    \begin{tikzpicture}
+      \node (d1) {};
+      \node[below=2 of d1] (d2) {};
+      \draw[->, bend right] (d1) to (d2);
+      \node[rectangle, draw=green, below right=0.3 and 1 of d1]
+        {3-Regularity};
+      \node[rectangle, draw=blue, below right=1 and 1.2 of d1]
+        {Periodic Universal lemma};
+      \node[rectangle, draw=yellow, below right=1.7 and 1 of d1]
+        {Closed walk lemma};
+    \end{tikzpicture}
+  \end{center}
   \begin{theorem}
     There exists a $(\mathcal{O}(1), 0, \mathcal{O}(\log n))$-pebble machine
     that moves along a closed walk and either explores the graph or visits at
@@ -248,11 +222,11 @@
 \begin{frame}
   \frametitle{Tape simulation via pebbles}
   \begin{itemize}
-    \item Simulate tape of size $m$ by pebbles:
+    \item Simulate $m$ bits by pebbles:
       \begin{itemize}
-        \item<3-> Separate into memory blocks of size $m_{1}$
-        \item<4-> Represent every block by one of
-          $p_{0},\dots,p_{\frac{m}{m_{1}}-1}$ pebbles
+        \item<3-> Separate into $m_{1}$ sized blocks
+        \item<4-> Represent blocks by pebbles
+          $p_{0},\dots,p_{\frac{m}{m_{1}}-1}$
       \end{itemize}
   \end{itemize}
   \uncover<2->{\input{tikz/tapesimint}}
@@ -264,11 +238,8 @@
   \begin{columns}
     \column{0.5\textwidth}
     \begin{itemize}
-      \item Every pebbles needs $2^{m_{1}}$ distinct \enquote{states}
-        \begin{itemize}
-          \item Placement on a walk with at least $2^{m_{1}}$ distinct vertices
-            yields \enquote{states}
-        \end{itemize}
+      \item Pebble needs $2^{m_{1}}$ distinct \enquote{states}
+      \item State as index of closed walk
     \end{itemize}
     \column{0.5\textwidth}
     \resizebox{\textwidth}{!}{\input{tikz/tapesimwalk}}
@@ -277,44 +248,46 @@
 
 \begin{frame}
   \frametitle{Mechanisms of simulation}
-  \begin{itemize}
-    \item Simulation of $M_{\text{Walk}}$ which explores at least $2^{m_{1}}$
+  \begin{enumerate}
+    \item Simulation of $M_{\text{walk}}$ providing walk with $2^{m_{1}}$
       distinct vertices
-    \item Identify \emph{distinct} vertices of the walk
+    \item Identify \emph{distinct} vertices of walk
     \item Read from and write to simulated tape
     \item Preserve tape content through steps of simulated agent
-  \end{itemize}
+  \end{enumerate}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Simulation of $M_{\text{Walk}}$}
+  \frametitle{1. Simulation of $M_{\text{walk}}$}
   \begin{itemize}
-    \item $M_{\text{Walk}}$ can be implemented as
+    \item $M_{\text{Walk}}$ implemented as
       $(\mathcal{O}(1), 0, \mathcal{O}(m_{1}))$ pebble machine
     \item Used variables/pebbles:
       \begin{itemize}
-        \item $\Twalk$: stores $M_{\text{Walk}}$'s tape
+        \item $\Twalk$: stores $M_{\text{walk}}$'s tape
         \item $\Tsteps$: stores number of taken steps
         \item $\Tid$: stores number of visited distinct vertices
-        \item $p_{\text{start}}$: marks the beginning
+        \item $p_{\text{start}}$: marks beginning of walk
       \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Finding distinct vertices}
+  \frametitle{2. Finding distinct vertices}
   Problem: Indistinguishable vertices $\leadsto$ next vertex \enquote{new}?
   \begin{columns}
     \column{0.5\textwidth}
     Solution:
     \begin{enumerate}
-      \item Execute step
-      \item Drop pebble $p_{\text{tmp}}$
-      \item Store $\Twalk$ in $T'_{\text{walk}}$
-      \item Restart $M_{\text{Walk}}$
-      \item Execute steps until $p_{\text{tmp}}$ is observed
-      \item If $\Twalk = T'_{\text{walk}}$ the vertex is new
-      \item Otherwise start over
+      \item \textcolor<3,8>{green}{Execute step}
+      \item \textcolor<4,9>{green}{Drop pebble $p_{\text{tmp}}$}
+      \item \textcolor<4,9>{green}{Store $\Twalk$ in $T'_{\text{walk}}$}
+      \item \textcolor<5,10>{green}{Restart $M_{\text{walk}}$}
+      \item \textcolor<6,11-18>{green}{Execute steps until $p_{\text{tmp}}$ is
+        observed}
+      \item \textcolor<19-20>{green}{If $\Twalk = T'_{\text{walk}}$ the vertex
+        is new (increase $\Tid$)}
+      \item \textcolor<7>{green}{Otherwise start over}
     \end{enumerate}
     \column{0.5\textwidth}
     \input{tikz/disvert}
@@ -322,11 +295,11 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Memory management}
+  \frametitle{3. Memory management}
   \begin{columns}
     \column{0.5\textwidth}
     \begin{itemize}
-      \item $\Thead$ stores head position
+      \item $\Thead$: head position
       \item $p_{\lfloor\frac{\Thead}{m_{1}}\rfloor}$: pebble of memory block
       \item $\mathit{off} = \Thead\mod m_{1}$: offset in memory block
       \item Reading:
@@ -348,7 +321,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Memory management: Writing}
+  \frametitle{3. Memory management: Writing}
   \begin{itemize}
     \item Read bit
     \item On bit-flip: move pebble
@@ -357,15 +330,15 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Transfer tape-content through movements}
+  \frametitle{4. Transfer tape-content through movements}
   \begin{itemize}
-    \item Simulated machine moves
+    \item Simulated agent moves
     \item Preserve tape-content:
       \begin{itemize}
-        \item Drop $p_{\text{next}}$ on next vertex
-        \item Transfer encoding pebbles onto walk $\omega'$ starting from
-          next vertex
-        \item Preserve \enquote{state} by placing at same index
+        \item Drop $p_{\text{next}}$ on next vertex $v$
+        \item $\omega'$ walk of $M_{\text{walk}}$ starting from $v$
+        \item Transfer encoding pebbles onto $\omega'$
+        \item Placing pebbles at same index
       \end{itemize}
   \end{itemize}
 \end{frame}
@@ -374,12 +347,12 @@
   \frametitle{Recall: Mechanisms of simulation}
   \begin{itemize}
     \item Simulation of $M_{\text{Walk}}$ which explores at least $2^{m_{1}}$
-      distinct vertices \uncover<2->{\checkmark}
+      distinct vertices \uncover<2->{\textcolor{green}{{\checkmark}}}
     \item Identify \emph{distinct} vertices of the walk
-      \uncover<3->{\checkmark}
-    \item Read from and write to simulated tape \uncover<4->{\checkmark}
+      \uncover<3->{\textcolor{green}{{\checkmark}}}
+    \item Read from and write to simulated tape \uncover<4->{\textcolor{green}{{\checkmark}}}
     \item Preserve tape content through steps of simulated agent
-      \uncover<5->{\checkmark}
+      \uncover<5->{\textcolor{green}{{\checkmark}}}
   \end{itemize}
   \uncover<6->{
     \begin{theorem}
@@ -393,30 +366,37 @@
 
 \begin{frame}
   \frametitle{Exploring graphs with $\log\log n$ pebbles}
-  \begin{itemize}
-    \item There is a $(c,0,c\cdot\log n)$ pebble machine which explores
-      a graph $G$ with $n$ vertices
-    \item Applying above simulation $\log \log n$ times yields
-      $(c'^{\log\log n}\cdot c, c'\cdot\log\log n, c)$ pebble machine exploring
-      $G$
-      \begin{theorem}
-        Any bounded-degree graph on at most $n$ vertices can be explored using
-        $\mathcal{O}(\log\log n)$ pebbles and memory.
-      \end{theorem}
-  \end{itemize}
+  \begin{theorem}
+    There is a constant $c\in\mathbb{N}$, such that for any Graph $G$
+    with bounded degree and any $(s,p,2m)$ pebble machine $\mathcal{M}$,
+    there exists a $(cs,p+c,m)$ pebble machine $\mathcal{M}'$ that simulates
+    the walk of $\mathcal{M}$ or explores $G$.
+  \end{theorem}
+  \begin{center}
+    \begin{tikzpicture}
+      \node (d1) {};
+      \node[below=2 of d1] (d2) {};
+      \draw[->, bend right] (d1) to (d2);
+      \node[below right=0.8 and 1 of d1, rectangle,draw=black] {Apply simulation $\log\log n$ times};
+    \end{tikzpicture}
+  \end{center}
+  \begin{theorem}
+    Any bounded-degree graph on at most $n$ vertices can be explored using
+    $\mathcal{O}(\log\log n)$ pebbles and memory.
+  \end{theorem}
 \end{frame}
 
 \section{Limitations of pebble machines}
 \begin{frame}
   \frametitle{Limitations of pebbles}
   \begin{itemize}
-    \item Construct 3-regular graphs which cannot be traversed by an agent
-      $\mathcal{A}$ with $p$ pebbles
-    \item Such graphs are called $p$-barriers
+    \item Construct 3-regular graphs agent $\mathcal{A}$ with $p$ pebbles
+      cannot traverse
+    \item Called $p$-barriers
       \begin{center}
         \resizebox{0.6\textwidth}{!}{\input{tikz/barrierint}}
       \end{center}
-    \item $\mathcal{A}$ cannot traverse a barrier from $v_{1}$ or $v_{2}$
+    \item $\mathcal{A}$ cannot traverse a $p$-barrier from $v_{1}$ or $v_{2}$
       to $v_{3}$ or $v_{4}$ or vice versa using at most $p$ pebbles
     \item Inductive construction of barriers
   \end{itemize}
@@ -425,15 +405,11 @@
 \begin{frame}
   \frametitle{Locality gadget}
   \begin{itemize}
-    \item Replace edge by a $(p-1)$-barrier
+    \item Replace edge by $(p-1)$-barrier
     \item Enforce \enquote{locality} of pebbles
-    \item An agent cannot traverse any gadget without \emph{all} his pebbles
-    \item All pebbles of the agent are either carried or placed within the
-      adjacent gadgets
       \begin{center}
         \uncover<2->{\resizebox{0.8\textwidth}{!}{\input{tikz/locgadget}}}
       \end{center}
-    \item<3-> Original vertices are called \emph{macro} vertices
   \end{itemize}
 \end{frame}
 
@@ -455,12 +431,12 @@
   \begin{columns}
     \column{0.5\textwidth}
     \begin{itemize}
-      \item Consider a subset of pebbles of cardinality $r$
-      \item Use the locality gadget as edges
-      \item Since pebbles are local: enumerate configurations in macro vertex
+      \item Subset of pebbles of cardinality $r$
+      \item Locality gadget as edges
+      \item Pebbles are local: configurations in macro vertex
         $C_{1},\dots,C_{\alpha}$
-      \item Project $A$ to a agent without pebbles $B$
-      \item $B$ has $\alpha$ states and traverses through macro vertices
+      \item Project $A$ to agent without pebbles $B$
+      \item $B$ has $\alpha$ states and traverses macro vertices
     \end{itemize}
     \column{0.5\textwidth}
     \resizebox{\textwidth}{!}{\input{tikz/projection}}
@@ -470,19 +446,17 @@
 \begin{frame}
   \frametitle{Barrier construction}
   \begin{itemize}
-    \item $B$ has no pebbles and is therefore prone to a $0$-barrier
-    \item Apply locality gadget to all edges
-    \item This yields a $p$-barrier for the chosen subset of pebbles
-    \item Iterate $p$-barriers for all possible subsets
-      \begin{center}
-        \resizebox{0.7\textwidth}{!}{\input{tikz/iterbarrier}}
-      \end{center}
+    \item $B$ has no pebbles and cannot traverse $0$-barrier
+    \item[$\rightarrow$] $p$-barrier for the chosen subset of pebbles:
   \end{itemize}
+  \begin{center}
+    \resizebox{0.8\textwidth}{!}{\input{tikz/iterbarrier}}
+  \end{center}
 \end{frame}
 
 \begin{frame}
   \frametitle{Barrier base case}
-  \begin{theorem}
+  \begin{theorem}[Fraigniaud et al.]
     For any $q$ non cooperative $s$-state agents without pebbles, there
     exists a 3-regular graph $G$ on $\mathcal{O}(qs)$ vertices with the
     following property: There are two edges $\left\{v_{1},v_{2}\right\}$
@@ -513,11 +487,8 @@
 
 \begin{frame}
   \frametitle{Barrier size}
-  \begin{itemize}
-    \item Iterative construction
-  \end{itemize}
   \begin{center}
-    \resizebox{0.8\textwidth}{!}{\input{tikz/barriersize}}
+    \resizebox{\textwidth}{!}{\input{tikz/barriersize}}
   \end{center}
   \begin{theorem}
     For $r\leq p$ and $s\geq 2^{p}$, the number of vertices of $r$-barrier
@@ -534,6 +505,16 @@
     $\Omega(\log\log n)$ distinguishable pebbles for exploring all
     graphs on at most $n$ vertices.
   \end{theorem}
+\end{frame}
+
+\section{Conclusion}
+\begin{frame}
+  \frametitle{Conclusion}
+  \begin{itemize}
+    \item Exploring graphs with $\mathcal{O}(\log\log n)$ pebbles and memory
+    \item Simulation via pebbles
+    \item Limitations of pebbles: Barrier construction
+  \end{itemize}
 \end{frame}
 
 \begin{frame}

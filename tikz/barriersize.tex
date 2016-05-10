@@ -3,39 +3,46 @@
   \node[node,below=3 of b0l0] (b0l1) {};
   \node[node,right=of b0l0] (b0r0) {};
   \node[node,below=3 of b0r0] (b0r1) {};
-  \node[fit=(b0l0) (b0l1) (b0r0) (b0r1),draw=black,label={90:\huge{$H_{1}$}}] (b0) {};
+  \node[fit=(b0l0) (b0l1) (b0r0) (b0r1),draw=black,label={90:\Huge{$H_{1}$}}, inner sep=15mm] (b0) {};
   \draw[dashed, thick] (b0.north) to (b0.south);
 
-  \node[node,right=of b0r0] (b1l0) {};
+  \node[node,right=4 of b0r0] (b1l0) {};
   \node[node,below=3 of b1l0] (b1l1) {};
   \node[node,right=12 of b1l0] (b1r0) {};
   \node[node,below=3 of b1r0] (b1r1) {};
-  \node[fit=(b1l0) (b1l1) (b1r0) (b1r1),draw=black,label={90:\huge{$H_{2}$}}] (b1) {};
+  \node[fit=(b1l0) (b1l1) (b1r0) (b1r1),draw=black,label={90:\Huge{$H_{2}$}}, inner sep=15mm] (b1) {};
   \draw[dashed, thick] (b1.north) to (b1.south);
 
-  \node[below right=0.1 and 1.3 of b1l0]   (i0) {};
-  \node[below=1.5 of i0]     (i1) {};
+  \node[above right=1 and 1.2 of b1l0]   (i0) {};
+  \node[below=1 of i0]     (i1) {};
   \node[right=3 of i0] (i2) {};
-  \node[below=1.5 of i2]     (i3) {};
-  \node[fit=(i0) (i1) (i2) (i3), draw=black, rectangle, label={90:\huge{$B_{r-1}$}}] (Br2) {};
+  \node[below=1 of i2]     (i3) {};
+  \node[fit=(i0) (i1) (i2) (i3), draw=black, rectangle] (Br2) {\Huge{$B_{r-1}$}};
 
-  \node[below right=0.08 and 0.3 of i0] (i4) {\huge{$\ddots$}};
-  \node[below =0.1 of i4] (i5) {};
-  \node[right =0.3 of i4]     (i6) {};
-  \node[below =0.1 of i6] (i7) {};
-  \node[fit=(i4) (i5) (i6) (i7), draw=black, rectangle] (Br3) {};
+  \node[below right=0.6 and 1.2 of b1l0]   (i4) {};
+  \node[below=1 of i4]     (i5) {};
+  \node[right=3 of i4] (i6) {};
+  \node[below=1 of i6]     (i7) {};
+  \node[fit=(i4) (i5) (i6) (i7), draw=black, rectangle] (Br3) {\Huge{$B_{r-1}$}};
 
 
-  \node[minimum size=12mm,circle,right=of b1r0] (b2l0) {};
+  % \node[below right=0.08 and 0.3 of i0] (i4) {\Huge{$\ddots$}};
+  % \node[below =0.1 of i4] (i5) {};
+  % \node[right =0.3 of i4]     (i6) {};
+  % \node[below =0.1 of i6] (i7) {};
+  % \node[fit=(i4) (i5) (i6) (i7), draw=black, rectangle] (Br3) {};
+
+
+  \node[minimum size=12mm,circle,right=2 of b1r0] (b2l0) {};
   \node[minimum size=12mm,circle,below=3 of b2l0] (b2l1) {};
-  \node[minimum size=12mm,circle,right=of b2l0] (b2r0) {};
+  \node[minimum size=12mm,circle,right=2 of b2l0] (b2r0) {};
   \node[minimum size=12mm,circle,below=3 of b2r0] (b2r1) {};
 
-  \node[node,right=of b2r0] (b3l0) {};
+  \node[node,right=3 of b2r0] (b3l0) {};
   \node[node,below=3 of b3l0] (b3l1) {};
-  \node[node,right=of b3l0] (b3r0) {};
+  \node[node,right=3 of b3l0] (b3r0) {};
   \node[node,below=3 of b3r0] (b3r1) {};
-  \node[fit=(b3l0) (b3l1) (b3r0) (b3r1),draw=black,label={90:\huge{$H_{{p}\choose{r}}$}}] (b2) {};
+  \node[fit=(b3l0) (b3l1) (b3r0) (b3r1),draw=black,label={90:\Huge{$H_{{p}\choose{r}}$}},inner sep=15mm] (b2) {};
   \draw[dashed, thick] (b1.north) to (b1.south);
 
   \draw[edge] (b0r0) to (b1l0);
@@ -49,6 +56,7 @@
   \draw[edge] (b3r0) to (b3r1);
 
   \draw[dashed] (b1l0) to (Br2.west);
+  \draw[dashed] (b1l0) to (Br3.west);
 
-  \node[fit=(b0) (b1) (b2), draw=black, label={90:\huge{$B$}},inner sep=12mm] (b) {};
+  \node[fit=(b0) (b1) (b2), draw=black, label={90:\Huge{$B_{r}$}},inner sep=15mm] (b) {};
 \end{tikzpicture}

@@ -1,6 +1,6 @@
 \begin{tikzpicture}
-  \node[node] (m1) {$v_{1}$};
-  \node[node,right=2cm of m1] (m2) {$v_{2}$};
+  \node[node] (m1) {};
+  \node[node,right=2cm of m1] (m2) {};
 
   \node[above left=of m1] (e1) {};
   \node[below=of m1] (e2) {};
@@ -8,11 +8,11 @@
   \node[above right=of m2] (e3) {};
   \node[below=of m2] (e4) {};
 
-  \draw[edge] (m1) to node[very near start, above] {0} (e1);
-  \draw[edge] (m1) to node[near start, left] {2} (e2);
+  \draw[edge] (m1) to node[very near start, above] {\textcolor{green}{0}} (e1);
+  \draw[edge] (m1) to node[near start, left] {\textcolor{green}{2}} (e2);
 
-  \draw[edge] (m2) to node[very near start, above] {1} (e3);
-  \draw[edge] (m2) to node[near start, right] {2} (e4);
+  \draw[edge] (m2) to node[very near start, above] {\textcolor{green}{1}} (e3);
+  \draw[edge] (m2) to node[near start, right] {\textcolor{green}{2}} (e4);
   
-  \draw[edge] (m1) to node[very near start, below] {1} node[very near end, above] {0} (m2);
+  \draw[edge] (m1) to node[very near start, below] {\textcolor{green}{1}} node[very near end, above] {\textcolor{green}{0}} (m2);
 \end{tikzpicture}
