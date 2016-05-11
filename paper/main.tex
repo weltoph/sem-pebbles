@@ -129,6 +129,23 @@ degree.
   There is an $\mathcal{O}(\log n)$-space algorithm producing a universal
   exploration sequence for any regular graph on $n$ vertices.
 \end{thm}
+At first we show that an agent which follows a periodic exploration sequence
+moves along a closed walk.
+\begin{lem}[Closed Walk Lemma]
+  An agent following an exploration sequence of the form
+  $(e_{0},\dots,e_{k-1})^{\ast}$ in an undirected graph moves along a closed
+  walk.
+\end{lem}
+\begin{proof}
+  We therefore consider a graph with vertices of the form $(v,\ell,i)$ which
+  denote that the agent entered in the original graph vertex $v$ through port
+  $\ell$ and that the next element of the exploration sequence is $i$. For the
+  edges we consider movements of the agent from the configuration given by the
+  current vertex $(v,\ell,i)$. It is easy to see that for a vertex $(v,\ell,i)$
+  the next vertex is deterministically chosen and is therefore unique. We
+  furthermore argue that there is at most one predecessor for every vertex.
+  ...
+\end{proof}
 
 We can now find the $(\mathcal{O}(1),0,\mathcal{O}(\log n))$ pebble machine we
 are looking for.
