@@ -106,7 +106,7 @@
       \item Exploration sequence $e_{1},\dots, e_{n}$
       \item Relative movements of agent
       \item Leaving port: $\ell_{i} + e_{i}\mod d_{v}$
-      \item \emph{Universial} for a class of graphs if it explores any graph of
+      \item \emph{Universal} for a class of graphs if it explores any graph of
         that class
       \item<2->[$\rightarrow$] Example:
         $\alt<3-3>{\colorbox{green}{1}}{\colorbox{white!0}{1}},
@@ -125,7 +125,7 @@
 \begin{frame}
   \frametitle{Exploring pebble machine}
   \begin{theorem}[Reingold]
-    There is an $\mathcal{O}(n)$-space algorithm producing a universal
+    There is an $\mathcal{O}(\log n)$-space algorithm producing a universal
     exploration sequence for any regular graph on $n$ vertices.
   \end{theorem}
   \begin{center}
@@ -139,11 +139,11 @@
       }
       \uncover<3->{
         \node[rectangle, draw=blue, below right=1 and 1.2 of d1]
-        {Periodic Universal lemma};
+        {Periodic Universal Lemma};
       }
       \uncover<4->{
         \node[rectangle, draw=yellow, below right=1.7 and 1 of d1]
-        {Closed walk lemma};
+        {Closed walk Lemma};
       }
     \end{tikzpicture}
   \end{center}
@@ -164,7 +164,7 @@
   \end{mdframed}
   \uncover<2->{
     \begin{mdframed}[linecolor=blue]
-      \begin{lemma}[Periodic exploration sequence (PES-Lemma)]
+      \begin{lemma}[Periodic Universal Lemma]
         There exists an $\mathcal{O}(\log n)$-space algorithm producing a
         universal exploration sequence $(e_{1},\dots,e_{k})^{\ast}$ for any
         $3$-regular graph with at most $n$ vertices.
@@ -212,7 +212,7 @@
 \section{Pebble simulation}
 \begin{frame}
   \begin{theorem}
-    There is a constant $c\in\mathbb{N}$, such that for any Graph $G$
+    There is a constant $c\in\mathbb{N}$, such that for any graph $G$
     with bounded degree and any $(s,p,2m)$ pebble machine $\mathcal{M}$, there
     exists a $(cs,p+c,m)$ pebble machine $\mathcal{M}'$ that simulates the walk
     of $\mathcal{M}$ or explores $G$.
@@ -338,7 +338,7 @@
         \item Drop $p_{\text{next}}$ on next vertex $v$
         \item $\omega'$ walk of $M_{\text{walk}}$ starting from $v$
         \item Transfer encoding pebbles onto $\omega'$
-        \item Placing pebbles at same index
+        \item Place pebbles at same index
       \end{itemize}
   \end{itemize}
 \end{frame}
@@ -356,7 +356,7 @@
   \end{itemize}
   \uncover<6->{
     \begin{theorem}
-      There is a constant $c\in\mathbb{N}$, such that for any Graph $G$
+      There is a constant $c\in\mathbb{N}$, such that for any graph $G$
       with bounded degree and any $(s,p,2m)$ pebble machine $\mathcal{M}$,
       there exists a $(cs,p+c,m)$ pebble machine $\mathcal{M}'$ that simulates
       the walk of $\mathcal{M}$ or explores $G$.
@@ -367,7 +367,7 @@
 \begin{frame}
   \frametitle{Exploring graphs with $\log\log n$ pebbles}
   \begin{theorem}
-    There is a constant $c\in\mathbb{N}$, such that for any Graph $G$
+    There is a constant $c\in\mathbb{N}$, such that for any graph $G$
     with bounded degree and any $(s,p,2m)$ pebble machine $\mathcal{M}$,
     there exists a $(cs,p+c,m)$ pebble machine $\mathcal{M}'$ that simulates
     the walk of $\mathcal{M}$ or explores $G$.
@@ -377,7 +377,7 @@
       \node (d1) {};
       \node[below=2 of d1] (d2) {};
       \draw[->, bend right] (d1) to (d2);
-      \node[below right=0.8 and 1 of d1, rectangle,draw=black] {Apply simulation $\log\log n$ times};
+      \node[below right=0.8 and 1 of d1, rectangle,draw=black] {Apply simulation Theorem $\log\log n$ times};
     \end{tikzpicture}
   \end{center}
   \begin{theorem}
@@ -390,7 +390,7 @@
 \begin{frame}
   \frametitle{Limitations of pebbles}
   \begin{itemize}
-    \item Construct 3-regular graphs agent $\mathcal{A}$ with $p$ pebbles
+    \item Construct 3-regular graphs which agent $\mathcal{A}$ with $p$ pebbles
       cannot traverse
     \item Called $p$-barriers
       \begin{center}
@@ -427,7 +427,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Barrier construction: Initial thoughts}
+  \frametitle{Barrier construction: Idea}
   \begin{columns}
     \column{0.5\textwidth}
     \begin{itemize}

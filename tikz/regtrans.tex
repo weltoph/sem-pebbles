@@ -1,0 +1,66 @@
+\begin{tikzpicture}
+  \node[node] (m1) {};
+  \node[node] (m2) [right = 4cm of m1] {};
+  \node[node] (m3) [right = 4cm of m2] {};
+
+  \draw[edge] (m1) to node[below,very near start] {0} node[above,very near end] {1} (m2);
+  \draw[edge] (m2) to node[above,very near start] {0} node[below,very near end] {0} (m3);
+
+  \begin{scope}[on background layer]
+    \node[fit=(m1),fill=green!50] (cl1) {};
+    \node[fit=(m2),fill=yellow!50] (cl2) {};
+    \node[fit=(m3),fill=red!50] (cl3) {};
+  \end{scope}
+
+  \node[node] (r11) [below = 6cm of m1] {$0$};
+  \node[node] (r12) [above = 2cm of r11] {$1$};
+  \node[node] (r13) [below = 2cm of r11] {$2$};
+
+  \node[node] (l11) [below = 6cm of m3] {$0$};
+  \node[node] (l12) [above = 2cm of l11] {$1$};
+  \node[node] (l13) [below = 2cm of l11] {$2$};
+
+  \node       (anker) [below = 6.5cm of m2] {};
+  \node[node] (mid0) [above right = 1cm and 1cm of anker] {$0$};
+  \node[node] (mid1) [below right = 1cm and 1cm of anker] {$1$};
+  \node[node] (mid2) [below = 3cm of anker] {$2$};
+  \node[node] (mid3) [below left = 1cm and 1cm of anker] {$3$};
+  \node[node] (mid4) [above left = 1cm and 1cm of anker] {$4$};
+  \node[node] (mid5) [above = 3cm of anker] {$5$};
+
+  \draw[edge] (r11) to node[left,near end] {1} node[right,near start] {0} (r12);
+  \draw[edge] (r11) to node[left,near end] {0} node[right,near start] {1} (r13);
+  \draw[edge,bend right] (r12.south west) to node[left,very near end] {1} node[left, very near start] {0} (r13.north west);
+
+  \draw[edge] (l11) to node[left,near end] {1} node[right,near start] {0}(l12);
+  \draw[edge] (l11) to node[left,near end] {0} node[right,near start] {1}(l13);
+  \draw[edge,bend left] (l12.south east) to node[left,very near end] {1} node[left, very near start] {0} (l13.north east);
+
+  \draw[edge] (mid0) to node[right,near start] {0} node[right,near end] {1} (mid1);
+  \draw[edge] (mid1) to node[right,near start] {0} node[right,near end] {1} (mid2);
+  \draw[edge] (mid2) to node[left,near start] {0} node[left,near end] {1} (mid3);
+  \draw[edge] (mid3) to node[left,near start] {0} node[left,near end] {1} (mid4);
+  \draw[edge] (mid4) to node[left,near start] {0} node[left,near end] {1} (mid5);
+  \draw[edge] (mid5) to node[right,near start] {0} node[right,near end] {1} (mid0);
+
+  \draw[edge] (mid0) to node[very near start, above] {2} node[very near end, above] {2} (l11);
+  \draw[edge] (mid2) to node[very near start, above] {2} node[very near end, above] {2} (l13);
+  \draw[edge,bend left=10] (mid4) to node[very near start, below] {2} node[very near end, above] {2} (l12);
+
+  \draw[edge] (mid1) to node[very near start, above] {2} node[very near end, above] {2} (r11);
+  \draw[edge] (mid3) to node[very near start, above] {2} node[very near end, above] {2} (r13);
+  \draw[edge] (mid5) to node[very near start, below] {2} node[very near end, above] {2} (r12);
+
+  \begin{scope}[on background layer]
+    \node[fit=(r11) (r12) (r13),fill=green!50] (cl1b) {};
+    \node[fit=(mid0) (mid1) (mid2) (mid3) (mid4) (mid5),fill=yellow!50] (cl2b) {};
+    \node[fit=(l11) (l12) (l13),fill=red!50] (cl3b) {};
+    \draw[draw=green!50] (cl1.south west) to (cl1b.north west);
+    \draw[draw=green!50] (cl1.south east) to (cl1b.north east);
+    \draw[draw=yellow!50] (cl2.south west) to (cl2b.north west);
+    \draw[draw=yellow!50] (cl2.south east) to (cl2b.north east);
+    \draw[draw=red!50] (cl3.south west) to (cl3b.north west);
+    \draw[draw=red!50] (cl3.south east) to (cl3b.north east);
+  \end{scope}
+
+\end{tikzpicture}
