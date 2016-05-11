@@ -1,4 +1,4 @@
-\documentclass[draft,oneside]{scrartcl}
+\documentclass[oneside]{scrartcl}
 
 \usepackage[utf8]{inputenc}
 
@@ -7,6 +7,7 @@
 \usepackage[ngerman, english]{babel}
 \usepackage[style=numeric,backend=biber]{biblatex}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{todonotes}
 \usepackage{mdframed}
@@ -46,6 +47,14 @@ wie neu geschlagene Batzen und zeigten ihnen den Weg.}%
 
 \setquotestyle{english}
 \section{Introduction}
+In the following we present the main results from \cite{pebbles}. These are
+how to systematically traverse graphs of a very large size by agents. Such
+agents are located on vertices of the graph and move along the edges. Because
+the memory of the agents is very limited we allow agents to use a set of
+distinguishable devices, called pebbles, which can be left on vertices and
+regained by another visit on the same vertex. As we will see this is a very
+rewarding extension since it is possible to obtain very low memory consumption
+for the agents.
 
 \section{Preliminaries}
 For the further course we assume the following: Firstly, the considered
@@ -144,51 +153,90 @@ moves along a closed walk.
   current vertex $(v,\ell,i)$. It is easy to see that for a vertex $(v,\ell,i)$
   the next vertex is deterministically chosen and is therefore unique. We
   furthermore argue that there is at most one predecessor for every vertex.
-  ...
+  Examine therefore two vertices $(v',\ell',i')$ and $(v'',\ell'',i'')$ which
+  lead to $(v,\ell,i)$. Both enter $v$ by $\ell$ thus $v' = v''$. Furthermore
+  it is clear that $i' + 1 \mod k = i = i'' + 1 \mod k$ which implies
+  $i' = i''$. Concludingly,
+  $\ell' + e_{i'} \mod d_{v'} = \ell'' + e_{i''} \mod d_{v''}$ and since
+  $v' = v''$ and $e_{i'} = e_{i''}$ and $\ell',\ell'' < d_{v'} = d_{v''}$
+  it follows that $\ell' = \ell''$.
+  Because now every vertex has one outgoing and at most one incoming edge 
+  a walk starting in $(v_{0},0,0)$ must loop
+  because there are only finitly many triples $(v,\ell,i)$ but the agent moves
+  infinitly. Projecting this walk to the first component yields a closed walk
+  on the original graph.
 \end{proof}
+In the following we can show that the algorithm from Theorem \ref{thm:logalg}
+can be adapted to output a periodic universal exploration sequence for every
+graph with up to $n$ vertices.
+\begin{lem}[Periodic Universal Lemma]
+  \label{lem:pul}
+  There exists an $\mathcal{O}(\log n)$-space algorithm producing a universal
+  exploration sequence $(e_{0},\dots,e_{k-1})^{\ast}$ for any 3-regular graph
+  with at most $n$ vertices.
+\end{lem}
+\begin{proof}
+  Let $\mathcal{M}$ be the TM of Theorem \ref{thm:logalg}.
+  At first we show that the exploration sequence produced by $\mathcal{M}$ is
+  universal for every graph with at most $n$ vertices. Assume therefore there
+  is a 3-regular graph with $n_{0} < n$ vertices for which $\mathcal{M}$
+  produces a non universal exploration sequence. Note that $n_{0}$ is even
+  because every 3-regular graph has an even amount of nodes by the Handshaking
+  lemma. Then there is a vertex $v$ which is not explored. We can now
+  repeatedly apply the following construction:
+  \begin{center}
+    \parbox{3\baselineskip}{\resizebox{!}{3\baselineskip}{\input{tikz/blowup}}}
+  \end{center}
+  Thus, we added 2 vertices which are also not explored. This can be iterated
+  until there are $n$ vertices for which all added vertices are not explored
+  contradicting Theorem \ref{thm:logalg}.
 
-We can now find the $(\mathcal{O}(1),0,\mathcal{O}(\log n))$ pebble machine we
-are looking for.
-\begin{thm}
-  \label{thm:pebblewalk}
-  There is a $(\mathcal{O}(1),0,\mathcal{O}(\log n))$ pebble machine which
-  explores every given graph $G$ with bounded degree $\Delta$ either completly
-  or at least loops on $n$ distinct vertices.
-\end{thm}
+  Secondly, we show that we can construct a TM $\mathcal{M}'$ which simulates
+  $\mathcal{M}$ until it produced a exploration sequence of length $3n\cdot c$
+  where $c$ is the number of configurations of $\mathcal{M}$. $\mathcal{M}'$
+  outputs now $(e_{0},\dots,e_{k-1})^{\ast}$ which is universal for any
+  3-regular graph with $n$ vertices. If we assume that it is not we can
+  conclude that we loop in a set of vertices $V'$ for which $|V'|<n$. By a
+  simple combinatorial argument we see that the produced exploration sequence
+  of $\mathcal{M}$ therefore always loops in $V'$ because an agent following
+  the produced exploration sequence would have entered a vertex twice by the
+  same port whilst $\mathcal{M}$ was in the same configuration.
+\end{proof}
 \begin{wrapfigure}{r}{0.5\textwidth}
   \caption{Illustration how to transform any graph to a 3-regular graph.}
   \label{fig:3reg}
-  \resizebox{0.5\textwidth}{!}{\input{tikz/regtrans}}
+  \flushright{\resizebox{0.4\textwidth}{!}{\input{tikz/regtrans}}}
 \end{wrapfigure}
-\begin{proof}
-  The main idea is to use the adapted algorithm $A$ to find for an
-  universal exploration sequence for a 3-regular graph from above. Therefore
-  we take $G$ and transform it to a 3-regular graph on which $A$ finds the
-  corresponding universal exploration sequence. The transformation replaces
-  any node $v$ with degree $d$ by $3d$ nodes which then form a circle where
-  every nodes has degree $3$. The edges of $v$ are moved to nodes in the
-  circle. Specifically the edge with port $i$ is replaced by 3 edges which are
-  attached to $(v,i), (v,i+d), (v,i+2d)$. (Note that the other
-  vertex attached to the edge is replaced by the same construction and therfore
-  offers enough ports for the newly introduced edges.) Figure \ref{fig:3reg}
-  illustrates this construction.  This simulation yields at most
-  $3\Delta n^{2}$ many nodes and can be emulated with $\mathcal{O}(1)$ many
-  memory space since it is only needed to store the second component of the
-  inserted nodes which is bounded by $3\Delta$. Furthermore $A$ can be run on
-  this constructed Graph and only needs $\mathcal{0}(\log n)$ space since
-  $\mathcal{O}(\log(3\Delta n^{2})) = \mathcal{O}(\log(3) + \log(\Delta) +
-  2\log(n)) = \mathcal{O}(\log n)$. Which yields the desired
-  $(\mathcal{O}(1),0,\mathcal{O}(\log n))$ pebble machine.
+These lemmata are used in \cite{pebbles} to give the following theorem.
+\begin{thm}
+  \label{thm:pebblewalk}
+  There exists a $(\mathcal{O}(1),0,\mathcal{O}(\log n))$-pebble machine
+  that moves along a closed walk and either explores the graph or visits
+  at least $n$ distinct vertices, for any graph with bounded degree.
+\end{thm}
+\begin{proof}[Sketch]
+  The TM constructed in Lemma \ref{lem:pul} is used as the desired pebble
+  machine. But first the graph has to be transformed to be 3-regular.
+  We refer therefore to Figure \ref{fig:3reg} which shows how every vertex $v$
+  can be replaced by $3\cdot d_{v}$ vertices which only have 3 edges. It is
+  furthermore noteworthy that this transformation can be emulated with
+  $\mathcal{O}(\log n)$ memory because of the regular structure of the
+  transformation (moving along port 0 or 1 stays in the gadget and only
+  moving along port 2 changes the actual vertex). For details we refer to
+  \cite{pebbles}.
 \end{proof}
 
-In order to obtain the desired boundary of $\log\log n$ space and $\log\log n$
-pebbles we show that a pebble machine can be simulated by storing its tape
-content by pebbles that are placed on a closed walk.
+\section{Simulation}
+In the following we present possibly the most interesting result from
+\cite{pebbles}. A simulation of a pebble machine which allows to store
+the tape content of the simulated pebble machine as pebbles placed on a
+defined walk within a graph.
 \begin{thm}
   \label{thm:simulation}
-  For every graph $G$ a $(s,p,2m)$ pebble machine $M$ can be simulated by
-  a $(cs,p + c,m)$ pebble machine that simulates the walk of $M$ or explores
-  $G$.
+  There is a constant $c\in\mathbb{N}$, such that for any graph $G$ with
+  bounded degree and any $(s,p,2m)$-pebble machine $\mathcal{M}$, there
+  exists a $(cs,p+c,m)$-pebble machine $\mathcal{M}'$ that simulates the
+  walk of $\mathcal{M}$ or explores $G$.
 \end{thm}
 \begin{proof}
   In this proof we will focus on the simulation and we leave out a thorough
@@ -208,7 +256,7 @@ content by pebbles that are placed on a closed walk.
   pebble $p_{0}$ to encode the first $m_{1}$ bits, the pebble $p_{1}$ used to
   encode the next $m_{1}$ bits and so forth. Thus, the pebble $p_{i}$ encodes
   the bits $im_{1},\dots,(i+1)m_{1}-1$. It is therefore necessary that every
-  pebble can encode $2^{m_1}$ different states. Therefore we use a closed walk
+  pebble can encode $2^{m_1}$ different states. For this we use a closed walk
   $\omega$ which visits at least $2^{m_1}$ distinct vertices yielding $2^{m_1}$
   many \enquote{states} for each pebble (by its placement on this closed walk).
   Therefore we can use the binary representation of the indices of the nodes
@@ -293,82 +341,117 @@ content by pebbles that are placed on a closed walk.
   walk $\omega'$ (obtained by $M_{\text{Walk}}$ simulated starting in $v'$;
   this walk is also ensured to have at least $2^{m_1}$ distinct vertices).
 \end{proof}
+
 As Theorem \ref{thm:pebblewalk} yields a $(c,0,c\cdot\log n)$ pebble machine
 that explores a given graph we can now repeatedly apply the simulation
-from Theorem \ref{thm:simulation} (precisely $\log\log n$ times) and end up
-with a $(c'^{\log\log n}\cdot c, \log\log n\cdot c',
-\frac{c}{2^{\log\log n}}\log n) =
-(c'^{\log\log n}\cdot c, \log\log n\cdot c', c)$ pebble machine exploring the
-graph.
+from Theorem \ref{thm:simulation} (precisely $\log\log n$ times) and obtain
+a $(c'^{\log\log n}\cdot c, \log\log n\cdot c', c)$-pebble machine exploring
+the graph as the following theorem from \cite{pebbles} states.
+\begin{thm}
+  Any bounded-degree graph of at most $n$ vertices can be explored using
+  $\mathcal{O}(\log \log n)$ pebbles and memory.
+\end{thm}
 
 \section{Barriers}
-In the following we will discuss the limits of the exploration approach with
-pebbles. Specifically, we will argue that we can construct 3-regular graphs
-that any agent with $p$ pebbles cannot traverse. Such graphs are called
-$p$-barriers.
-Note that connecting a 3-regular graph might violate its 3-regularity.
-Therefore we rely on having a distinguishable edge $e$ in the 3-regular graph
-which we can delete to connect the vertices $e$ connected to the
-\enquote{outside}. This preserves the 3-regularity. The interested reader might
-then enjoy the following exercise:
-\begin{prop}
-  Given a $p$-barrier with $m$ vertices for a agent $A$ with $p$ pebbles.
-  Construct a trap for $A$ (with $2m+4$ vertices). 
-\end{prop}
+In the following we lead through the discussion in \cite{pebbles} of the limits
+of the exploration approach with pebbles. Specifically, we will argue that
+there are 3-regular graphs that any agent with $p$ pebbles cannot traverse.
+Such graphs are called $p$-barriers.
 
-\begin{wrapfigure}{r}{0.4\textwidth}
-  \caption{Gadget construction that ensures locality of pebbles.}
-  \label{fig:gadget}
-  \resizebox{0.4\textwidth}{!}{\input{tikz/gadget}}
-\end{wrapfigure}
-The construction of barriers is inductively and therefore requires that the
-base case can be constructed directly. Fortunately Theorem 4 in \cite{0barrier}
-yields a graph which can be adapted to a 0-barrier. With this in mind we
-introduce a gadget construction for a given $r$-barrier $B$ as it can be seen
-in Figure \ref{fig:gadget}. Replacing edges of a graph with
-such gadgets enforces, in a sense, \enquote{locality} of pebbles. We call
-the verices that are connected by the gadget macro-vertices and if a $r+1$
-pebble machine stands on a macro vertex we can safely be assured that all
-pebbles are either carried by the agent or are placed within the adjacent
-\enquote{edges} because otherwise the agent has left a pebble across of an
-$r$-barrier and crossed the barrier with $r$ pebbles contradicting that it is
-in fact an $r$-barrier. This observation can be used to construct an
-$r$-barrier given a $(r-1)$-barrier is known.
+This construction of barriers is iteratively and relies on a result from
+\cite{0barrier}.
 \begin{thm}
-  With a given $(r-1)$-barrier for an agent $A$ a $r$-barrier can be
-  constructed.
+  For any $q$ non-cooperative $s$-state agents without pebbles, there exists
+  a 3-regular graph $G$ on $\mathcal{O}(qs)$ vertices with the following
+  property: There are two edges $\left\{v_1,v_2\right\}$ and
+  $\left\{v_3,v_4\right\}$ in $G$, the first labeled 0, such that any of the
+  $q$ agents starting in $v_1$ or $v_2$ does not traverse the edge
+  $\left\{v_3,v_4\right\}$.
+\end{thm}
+From this we obtain a $0$-barrier for an agent $\mathcal{A}$ by applying
+above theorem to the set of agents
+$\left\{\mathcal{A}_{q}\mid q\in Q_{\mathcal{A}}\right\}$ where
+$\mathcal{A}_{q}$ has the same behaviour as $\mathcal{A}$ but starts in
+state $q$. More formally,
+\begin{lem}
+  \label{lem:0bar}
+  For every $s$-state agent with $p$ pebbles $\mathcal{A}$ there exists a
+  $0$-barrier with $\mathcal{O}(s^{2})$ vertices, which is independent of
+  the starting state of $\mathcal{A}$.
+\end{lem}
+
+In the following we introduce a gadget construction which enforces
+\enquote{locality} of pebbles. For an agent with $p$ pebbles we can exchange
+every edge in a graph $G$ with a copy of a $(p-1)$-barrier $B$. We refer to the
+original vertices as \emph{macro} vertices and to the constructed graph as
+$G(B)$.  Since every edge is replaced by a $(p-1)$-barrier an agent has to use
+at least $p$ pebbles to cross this barrier which means that the agent keeps its
+pebbles nearby because the agent cannot move along \enquote{edges} without
+them.  This leads to the following lemma.
+\begin{lem}
+  \label{lem:loc}
+  Let $B$ be a $(p-1)$-barrier for an agent $\mathcal{A}$ with $p$ pebbles.
+  Then, the following holds for any graph of the form $G(B)$.
+  \begin{enumerate}
+    \item $\mathcal{A}$ cannot get from a macro vertex $v$ to a distinct
+      macro vertex $v'$ while using less than $p$ pebbles.
+    \item At any time, there is some macro vertex $v$ such that $\mathcal{A}$
+      and each pebble are at $v$ or in one of the surrounding gadgets $B(0),
+      B(1), B(2)$
+  \end{enumerate}
+\end{lem}
+
+With the help of this gadget construction we can now present how it is possible
+to construct barriers iteratively.
+\begin{thm}
+  Given an $(r-1)$-barrier $B$ with $m$ vertices for an agent $\mathcal{A}$
+  with $p\geq r$ pebbles, we can construct an $r$-barrier $B'$ with
+  $\mathcal{O}({{p}\choose{r}}\cdot m\cdot \alpha_{B}^{2})$ vertices for
+  $\mathcal{A}$.
 \end{thm}
 \begin{proof}
-  We will present only the key ideas of this proof since it involves a
-  few technicalities which do not add much to the general understanding
-  and are therefore omitted. Given a subset of pebbles of cardinality $r$
-  we can construct an $r$-barrier for this subset by using the given
-  $(r-1)$-barrier. By the above described gadget construction we can enforce
-  the locality of the used $r$ pebbles. We can then project
-  $A$'s behaviour to an agent $B$ which is a pebble machine without pebbles
-  and has a state for every configuration (which includes the placing of the
-  pebbles as well as state and tape content) of $A$. $B$ now moves over the
-  macro-vertices as $A$ moves through the gadgets. But $B$ has no pebbles and
-  thus, it is applicable to the 0-barrier. Projecting this construct back to
-  the gadget construction yields an $r$-barrier for $A$ and the chosen subset
-  of pebbles. Connecting now such $r$-barriers for all possible subsets of
-  pebbles gives the desired $r$-barrier because $A$ always fails to traverse
-  the $r$-barrier particularly constructed for the pebble set used by $A$.
+  For any subset of pebbles of cardinality $p$ we can use $B$ to apply the
+  locality construction and obtaining a graph $G(B)$. For $G(B)$ we can argue
+  with the use of Lemma \ref{lem:loc} that $\mathcal{A}$ has only a limited
+  amount of configurations within a macro vertex. Let $\alpha_{B}$ be the
+  amount of these configurations. We can now project $\mathcal{A}$ to a pebble
+  machine without pebbles $\mathcal{B}$ with $\alpha_{B}$ states which only
+  traverses macro vertices. Since $\mathcal{B}$ cannot use any pebbles we can
+  obtain by Lemma \ref{lem:0bar} a barrier $C$ for it. Then we can argue that
+  $C(B)$ is the desired barrier for $\mathcal{A}$ which uses only the chosen
+  subset of pebbles. For all ${p}\choose{r}$ possible subsets of pebbles a
+  barrier can be obtained as described above. Connecting these barriers gives
+  the desired barrier $B'$.
 \end{proof}
-By constructing such barriers it is possible to find for every agent
-with $s$ states and $p$ pebbles (note that here the tape of the agent is
-encoded in the states) it is possible to give a trap where the amount of
-vertices can be bound by $\mathcal{O}(s^{8^{p+1}})$. Which can be used to
-show that every agent with sub-logarithmic bits of memory needs at least
-$\Omega(\log\log n)$ many pebbles to explore at least $n$ vertices.
+For the given bound of the vertices we refer to \cite{pebbles}. The
+analysis there contains a thorough combinatorial analysis of the amount of
+vertices for barriers which we do not present here but which leads to the
+following theorem.
+\begin{thm}
+  For $r\leq p$ and $s \geq 2^{p}$, the number of vertices of the $r$-barrier
+  $B_{r}$ for the $s$-state agent $\mathcal{A}$ with $p$ pebbles is bounded by
+  $\mathcal{O}(s^{8^{r+1}})$.
+\end{thm}
+
+Using this theorem it is possible to show that any agent with sublogarithmic
+memory needs to use at least $\log\log n$ pebbles to explore a graph with $n$
+vertices. For this result it is essential that from a $p$-barrier with $m$
+vertices for an agent with $p$ pebbles we can construct a trap for this agent
+with $2m+4$ vertices. Due to its technical nature we omit the proof to the
+following theorem.
+\begin{thm}
+  For any constant $\epsilon < 0$, an agent with at most
+  $\mathcal{O}((\log n)^{1-\epsilon})$ bits of memory needs at least
+  $\Omega(\log\log n)$ distinguishable pebbles for exploring all graphs on at
+  most $n$ vertices.
+\end{thm}
 
 \section{Conclusion}
 In this paper re-presented the idea of pebble machines for graph exploration
-as discussed in \cite{pebbles}. For this we focused on conwaying the essential
-ideas and constructions rather than explore the technical details. The main
-result clearly is the simulation of memory of pebble machines by encoding
-memory blocks by pebbles and that these pebbles keep a state by their placement
-along a closed walk.
+as discussed in \cite{pebbles}. We lay the main focus on the simulation of
+memory of pebble machines The idea to give pebbles a state by their placement
+on a closed walk strikes as a very interesting approach. Furthermore it is also
+possible to find limitations of this approach in the form of barriers.
 
 \setquotestyle{english}
 \printbibliography
