@@ -47,42 +47,41 @@ wie neu geschlagene Batzen und zeigten ihnen den Weg.}%
 
 \setquotestyle{english}
 \section{Introduction}
-In the following we present the main results from \cite{pebbles}. These are
-how to systematically traverse graphs of a very large size by agents. Such
-agents are located on vertices of the graph and move along the edges. Because
+In this work we present the main results from \cite{pebbles}. These are
+how to systematically traverse graphs of a very large size by agents.
+Agents are located on vertices of the graph and move along the edges. Because
 the memory of the agents is very limited we allow agents to use a set of
-distinguishable devices, called pebbles, which can be left on vertices and
-regained by another visit on the same vertex. As we will see this is a very
-rewarding extension since it is possible to obtain very low memory consumption
-for the agents.
+distinguishable tokens, called pebbles, which can be left on a vertex and
+recollected by another visit of the same vertex. As we will see this is a very
+beneficial extension since it is possible to obtain a very low memory footprint
+for the agents while preserving the exploration range.
 
 \section{Preliminaries}
 For the further course we assume the following: Firstly, the considered
-graphs are finite but huge. The considered agents have limited memory and can
-therefore not compute the identifier of vertices. This makes all vertices
+graphs are finite but huge and agents have limited memory and can
+therefore not compute the identifier of vertices which renders all vertices
 indistinguishable for the agents. Also, the degree of the vertices is bounded
 by a constant $\Delta$. For every vertex $v$ we assume that the connected edges
 can be locally enumerated with labels $0,\dots,d_{v} - 1$ where $d_{v}$ is the
 degree of $v$. These edge-labels are called ports and every edge has one port
-for both vertices it connects. Note that there is no relation between these
-ports is presumed.
+for both vertices it connects. Note that no relation between these ports is
+presumed.
 
-\section{Graph exploration}
+\section{Graph Exploration}
 We begin this section by formally defining our agents in the form of
 \emph{pebble machines}. This definition closely follows the notion of Turing
 machines but adds mechanisms to model the movements of the agent.
 \begin{definition}[Pebble machine]
   A $(s,p,m)$-\emph{pebble machine} $\mathcal{M}$ is defined as a tuple
-  $(Q,F,P,m,\delta,\din,\dout,q_{0})$. Here we have
+  $(Q,F,P,m,\delta,\din,\dout,q_{0})$ with
   \begin{enumerate}
-    \item a finite set of states $Q$ with cadinality $s$
+    \item a finite set of states $Q$ with cardinality $s$
     \item a finite set of final states $F\subseteq Q$
     \item a finite set of distinguishable pebbles $P$ with cardinality $p$
-    \item the length of the available memory tape $m$
+    \item the length $m$ of the available memory tape
     \item a computation function $\delta$
-    \item a function that describes the movement onto a vertex
-      $\din$
-    \item a function that describes the leaving of a vertex $\dout$
+    \item a function $\din$ that describes the movement onto a vertex
+    \item a function $\dout$ that describes the leaving of a vertex
     \item an inital state $q_{0}$
   \end{enumerate}
   where formally the computation function models the behaviour of the pebble
@@ -100,38 +99,47 @@ machines but adds mechanisms to model the movements of the agent.
   \end{equation*}
   models how a pebble machine moves upon a vertex $v$ with
   $\din(q,P_{1},P_{2},d,\ell) = q'$ where $q$ is the current state of
-  $\mathcal{M}$, $P_{1}$ the set of pebbles it carries, $P_{2}$ the set
+  $\mathcal{M}$, $P_{1}$ is the set of pebbles it carries, $P_{2}$ the set
   of pebbles located on $v$, $d$ is the degree of $v$ and $\ell$ the port
-  through which $\mathcal{M}$ enters $v$. Then $\mathcal{M}$ starts its
-  computation according to $\delta$ in state $q'$.
-
-  $\dout$ is defined as
+  through which $\mathcal{M}$ enters $v$. Then, $\mathcal{M}$ starts its
+  computation according to $\delta$ in state $q'$.  On the other hand $\dout$
+  is defined as
   \begin{equation*}
     \dout\colon Q
     \rightarrow 2^{P}\times 2^{P}\times \left\{0,\dots,\Delta - 1\right\}
   \end{equation*}
   where $\dout(q) = (P_{1}, P_{2}, \ell)$ defines that $\mathcal{M}$ leaves
-  a vertex $v$ through port $\ell$ dropping the pebbles in $P_{1}$ onto $v$
-  and carrying the pebble in $P_{2}$.
+  a vertex $v$ through port $\ell$, drops the pebbles in $P_{1}$ onto $v$
+  and carries the pebbles in $P_{2}$.
 
-  We additionally demand consistency of pebbles, i.e. that if the agent
+  We additionally demand consistency of pebbles, i.e. if the agent
   carried the pebbles in $P_{1}\subseteq P$ and found the pebbles in
-  $P_{2}\subseteq P$ it is necessary that $P_{1}$ and $P_{2}$ are disjoint and
-  furthermore that if the agent leaves carrying $P'_{1}$ and leaving $P'_{2}$
-  behind those sets are disjoint and $P_{1}\cup P_{2} = P'_{1}\cup P'_{2}$.
+  $P_{2}\subseteq P$ it is necessary that $P_{1}$ and $P_{2}$ are disjoint.
+  Furthermore, if the agent leaves carrying $P'_{1}$ and dropping $P'_{2}$
+  those sets are disjoint and $P_{1}\cup P_{2} = P'_{1}\cup P'_{2}$.
 \end{definition}
 
+\begin{wrapfigure}{r}{0.4\textwidth}
+  \begin{center}
+    \resizebox{0.3\textwidth}{!}{\input{tikz/blowup}}
+  \end{center}
+  \caption{Replace vertex by a 3-clique preserving 3-regularity.}
+  \label{fig:blowup}
+\end{wrapfigure}
 In order to describe the movement of an agent we introduce the notion of an
-exploration sequence as $e_{0}, e_{1},\dots$ which define relative movements:
-Let $\ell = \ell_{0},\ell_{1},\dots$ be a sequence of variables where
-$\ell_{i}$ denotes the port which a vertex $v$ was entered through. Then an
-agent following $\ell$ leaves through port
+exploration sequence $e = e_{0}, e_{1},\dots$ for agents which defines relative
+movements.
+Let $\ell = \ell_{0},\ell_{1},\dots$ be a sequence of variables.
+$\ell_{i}$ denotes that the $i$-th visited vertex is entered through port
+$\ell_{i}$. Then, an agent following $e$ leaves through port
 $(\ell_{i} + e_{i}) \mod d_{v}$. We define $\ell_{0} = 0$ and the notion
-$(e_{0},\dots,e_{k})^{\ast}$ for periodic exploration sequence.
+$(e_{0},\dots,e_{k})^{\ast}$ for periodic exploration sequences. We call an
+exploration sequence universal for a class of graphs if an agent following
+it explores any graph of that class.
 
 Beginning from the following result of \cite{logspacealg} we present how we can
-obtain an $(\mathcal{O}(1),0,\mathcal{O}(\log n))$ pebble machine that walks
-along a closed walk of at least $n$ distinct vertices in any graph with bounded
+obtain an $(\mathcal{O}(1),0,\mathcal{O}(\log n))$-pebble machine that performs
+a closed walk of at least $n$ distinct vertices in any graph with bounded
 degree.
 \begin{thm}[Reingold]
   \label{thm:logalg}
@@ -146,20 +154,20 @@ moves along a closed walk.
   walk.
 \end{lem}
 \begin{proof}
-  We therefore consider a graph with vertices of the form $(v,\ell,i)$ which
-  denote that the agent entered in the original graph vertex $v$ through port
-  $\ell$ and that the next element of the exploration sequence is $i$. For the
-  edges we consider movements of the agent from the configuration given by the
-  current vertex $(v,\ell,i)$. It is easy to see that for a vertex $(v,\ell,i)$
-  the next vertex is deterministically chosen and is therefore unique. We
-  furthermore argue that there is at most one predecessor for every vertex.
-  Examine therefore two vertices $(v',\ell',i')$ and $(v'',\ell'',i'')$ which
-  lead to $(v,\ell,i)$. Both enter $v$ by $\ell$ thus $v' = v''$. Furthermore
-  it is clear that $i' + 1 \mod k = i = i'' + 1 \mod k$ which implies
-  $i' = i''$. Concludingly,
+  Consider a graph with vertices of the form $(v,\ell,i)$
+  denoting that the agent entered in the original graph vertex $v$ through port
+  $\ell$ and that the next element of the exploration sequence is $i$.
+  Edges are given by the next movement of the agent following the exploration
+  sequence from the configuration of the current vertex $(v,\ell,i)$. It is
+  easy to see that for a vertex $(v,\ell,i)$
+  the next vertex is deterministically chosen and therefore is unique.
+  Furthermore we argue that there is at most one predecessor for every vertex.
+  Examine two predecessor $(v',\ell',i')$ and $(v'',\ell'',i'')$ for
+  $(v,\ell,i)$. Both enter $v$ by $\ell$ thus $v' = v''$.  It is clear that
+  $i' + 1 \mod k = i = i'' + 1 \mod k$ which implies $i' = i''$. Concludingly,
   $\ell' + e_{i'} \mod d_{v'} = \ell'' + e_{i''} \mod d_{v''}$ and since
-  $v' = v''$ and $e_{i'} = e_{i''}$ and $\ell',\ell'' < d_{v'} = d_{v''}$
-  it follows that $\ell' = \ell''$.
+  $v' = v''$, $e_{i'} = e_{i''}$ and $\ell',\ell'' < d_{v'} = d_{v''}$,
+  $\ell' = \ell''$ follows.
   Because now every vertex has one outgoing and at most one incoming edge 
   a walk starting in $(v_{0},0,0)$ must loop
   because there are only finitly many triples $(v,\ell,i)$ but the agent moves
@@ -175,38 +183,36 @@ graph with up to $n$ vertices.
   exploration sequence $(e_{0},\dots,e_{k-1})^{\ast}$ for any 3-regular graph
   with at most $n$ vertices.
 \end{lem}
-\begin{proof}
-  Let $\mathcal{M}$ be the TM of Theorem \ref{thm:logalg}.
-  At first we show that the exploration sequence produced by $\mathcal{M}$ is
-  universal for every graph with at most $n$ vertices. Assume therefore there
-  is a 3-regular graph with $n_{0} < n$ vertices for which $\mathcal{M}$
-  produces a non universal exploration sequence. Note that $n_{0}$ is even
-  because every 3-regular graph has an even amount of nodes by the Handshaking
-  lemma. Then there is a vertex $v$ which is not explored. We can now
-  repeatedly apply the following construction:
-  \begin{center}
-    \parbox{3\baselineskip}{\resizebox{!}{3\baselineskip}{\input{tikz/blowup}}}
-  \end{center}
-  Thus, we added 2 vertices which are also not explored. This can be iterated
-  until there are $n$ vertices for which all added vertices are not explored
-  contradicting Theorem \ref{thm:logalg}.
-
-  Secondly, we show that we can construct a TM $\mathcal{M}'$ which simulates
-  $\mathcal{M}$ until it produced a exploration sequence of length $3n\cdot c$
-  where $c$ is the number of configurations of $\mathcal{M}$. $\mathcal{M}'$
-  outputs now $(e_{0},\dots,e_{k-1})^{\ast}$ which is universal for any
-  3-regular graph with $n$ vertices. If we assume that it is not we can
-  conclude that we loop in a set of vertices $V'$ for which $|V'|<n$. By a
-  simple combinatorial argument we see that the produced exploration sequence
-  of $\mathcal{M}$ therefore always loops in $V'$ because an agent following
-  the produced exploration sequence would have entered a vertex twice by the
-  same port whilst $\mathcal{M}$ was in the same configuration.
-\end{proof}
 \begin{wrapfigure}{r}{0.5\textwidth}
+  \flushright{\resizebox{0.4\textwidth}{!}{\input{tikz/regtrans}}}
   \caption{Illustration how to transform any graph to a 3-regular graph.}
   \label{fig:3reg}
-  \flushright{\resizebox{0.4\textwidth}{!}{\input{tikz/regtrans}}}
 \end{wrapfigure}
+\begin{proof}
+  Let $\mathcal{M}$ be the Turing machine(TM) of Theorem \ref{thm:logalg}.
+  At first we show that the exploration sequence produced by $\mathcal{M}$ is
+  universal for every graph with at most $n$ vertices. Assume there
+  is a 3-regular graph with $n_{0} < n$ vertices for which $\mathcal{M}$
+  produces a non-universal exploration sequence. Note that $n_{0}$ is even
+  because every 3-regular graph has an even number of nodes by the Handshaking
+  Lemma. Then, there is a vertex $v$ which is not explored. We can now
+  repeatedly transform $v$ into a clique of three vertices with degree three
+  (see Figure \ref{fig:blowup}).
+  Thus, we added two vertices which are also not explored. This can be iterated
+  until there are $n$ vertices. All the added vertices are not explored in a
+  graph with $n$ vertices contradicting Theorem \ref{thm:logalg}.
+
+  Secondly, we show that we can construct a TM $\mathcal{M}'$ which simulates
+  $\mathcal{M}$ until it produced a exploration sequence of length
+  $k = 3n\cdot c$ where $c$ is the number of configurations of $\mathcal{M}$.
+  $\mathcal{M}'$ outputs now $(e_{0},\dots,e_{k-1})^{\ast}$ which is universal
+  for any 3-regular graph with $n$ vertices. If we assume that it is not, we
+  can conclude that we loop in a set of vertices $V'$ for which $|V'|<n$. By a
+  combinatorial argument we see that the produced exploration sequence $e$
+  of $\mathcal{M}$ always loops in $V'$ because an agent following
+  $e$ would have entered a vertex twice by the same port whilst $\mathcal{M}$
+  is in the same configuration both times.
+\end{proof}
 These lemmata are used in \cite{pebbles} to give the following theorem.
 \begin{thm}
   \label{thm:pebblewalk}
@@ -214,23 +220,23 @@ These lemmata are used in \cite{pebbles} to give the following theorem.
   that moves along a closed walk and either explores the graph or visits
   at least $n$ distinct vertices, for any graph with bounded degree.
 \end{thm}
-\begin{proof}[Sketch]
+\begin{proof}[Proof-Sketch]
   The TM constructed in Lemma \ref{lem:pul} is used as the desired pebble
-  machine. But first the graph has to be transformed to be 3-regular.
+  machine but first the graph has to be transformed to be 3-regular.
   We refer therefore to Figure \ref{fig:3reg} which shows how every vertex $v$
-  can be replaced by $3\cdot d_{v}$ vertices which only have 3 edges. It is
-  furthermore noteworthy that this transformation can be emulated with
-  $\mathcal{O}(\log n)$ memory because of the regular structure of the
+  can be replaced by a gadget with $3\cdot d_{v}$ vertices of degree three. It
+  is also noteworthy that this transformation can be done with
+  $\mathcal{O}(\log n)$ memory: Because of the regular structure of the
   transformation (moving along port 0 or 1 stays in the gadget and only
   moving along port 2 changes the actual vertex). For details we refer to
   \cite{pebbles}.
 \end{proof}
 
 \section{Simulation}
-In the following we present possibly the most interesting result from
-\cite{pebbles}. A simulation of a pebble machine which allows to store
+In the following we present the most interesting result from
+\cite{pebbles}: A simulation of a pebble machine which allows to store
 the tape content of the simulated pebble machine as pebbles placed on a
-defined walk within a graph.
+walk within a graph.
 \begin{thm}
   \label{thm:simulation}
   There is a constant $c\in\mathbb{N}$, such that for any graph $G$ with
@@ -238,108 +244,53 @@ defined walk within a graph.
   exists a $(cs,p+c,m)$-pebble machine $\mathcal{M}'$ that simulates the
   walk of $\mathcal{M}$ or explores $G$.
 \end{thm}
-\begin{proof}
-  In this proof we will focus on the simulation and we leave out a thorough
-  analysis of the space requirements of the simulation since it is rather
-  technical but does not add a lot to the idea. Nevertheless we encourage
-  interested readers to see \cite{pebbles} for the details.
+\begin{proof}[Proof-Sketch]
+  For a detailed description of mechanisms of the simulation we refer to
+  \cite{pebbles}. At this point we present the conceptional ideas but encourage
+  interested readers to look up the details.
+  
+  We separate the tape of the simulated machine into memory blocks of size
+  $m_1$. With Theorem \ref{thm:pebblewalk} there is a
+  $(\mathcal{O}(1),0,\mathcal{O}(m_{1}))$-pebble machine
+  $\mathcal{M}_{\text{walk}}$ to perform a closed walk $\omega$ with
+  $2^{m_{1}}$ distinct vertices. We use a pebble to mark the beginning vertex
+  of this walk. Every memory block can now be represented by
+  a pebble which encodes the block by its placement on $\omega$ (see
+  Figure \ref{fig:tapesim}).
 
-  The main idea of this simulation is to store the tape of $M$ by pebbles
-  placed on a closed walk in the graph. We show that every node on this closed
-  walk can be given an index and a pebble placed on a node represents the
-  binary representation of the index as the content of $M$'s tape. Therefore we
-  first off introduce a variable $m_{1}$ which is dependent on the simulated
-  pebble machine $M$ (further requirements on $m_{1}$ and how to obtain it
-  can be seen in \cite{pebbles}). We will now take the tape of $M$ and separate
-  it into $2m/m_{1}$ blocks of the size $m_{1}$. And each of these blocks is
-  encoded by the placement of a pebble on a closed walk $\omega$. So we use
-  pebble $p_{0}$ to encode the first $m_{1}$ bits, the pebble $p_{1}$ used to
-  encode the next $m_{1}$ bits and so forth. Thus, the pebble $p_{i}$ encodes
-  the bits $im_{1},\dots,(i+1)m_{1}-1$. It is therefore necessary that every
-  pebble can encode $2^{m_1}$ different states. For this we use a closed walk
-  $\omega$ which visits at least $2^{m_1}$ distinct vertices yielding $2^{m_1}$
-  many \enquote{states} for each pebble (by its placement on this closed walk).
-  Therefore we can use the binary representation of the indices of the nodes
-  on which the pebbles are placed as the content of the encoded memory block.
-  Figure \ref{fig:tapesim} illustrates this.
-  \begin{figure}[h!]
+  Because the vertices are indistinguishable it is necessary to find a
+  mechanism to enumerate distinct vertices in $\omega$ otherwise the state of
+  pebbles might be ambiguous. This can be achieved by always marking the next
+  vertex $v$ of $\omega$ with a pebble and check if $v$ is
+  traversed by a new run of $\mathcal{M}_{\text{walk}}$ in fewer steps. If so
+  $v$ is not a new distinct vertex.
+
+  The head position of the simulated machine is stored in a variable $\Thead$.
+  In order to access this memory cell the state of the pebble with index
+  $\left\lfloor \frac{\Thead}{m_{1}}\right\rfloor$ is extracted. Then the
+  corresponding $(\Thead\mod m_{1})$-th bit is the desired bit. If this bit is
+  altered the corresponding pebble can be moved according to the new state of
+  the memory block by $2^{(\Thead\mod m_{1})}$ indices on $\omega$.
+
+  Finally, if the simulated machine executes a movement, it is necessary to
+  carry the tape content along. Therefore the vertex $v'$ the machine moves
+  onto is marked with a pebble and $\mathcal{M}_{\text{walk}}$ is used to find
+  a new closed walk $\omega'$ starting in $v'$. Then all encoding pebbles are
+  moved to the corresponding distinct vertex in $\omega'$ to preserve their
+  states. (Note that $\mathcal{M}_{\text{walk}}$ gives a walk with at least
+  $2^{m_{1}}$ distinct vertices for every starting vertex).
+  \begin{figure}
+    \begin{center}
+      \resizebox{0.6\textwidth}{!}{\input{tikz/tapesim}}
+    \end{center}
     \caption{Illustration how to simulate the tape of a pebble machine by
       placing pebbles on a closed walk where $m_{1} = 3$. Note that the first
       $2^{m_{1}}=2^{3}=8$ distinct vertices are used for the simulation but the
     walk can be longer (as indicated by the dotted connection from $7$ to $0$).}
     \label{fig:tapesim}
-    \begin{center}
-      \resizebox{0.6\textwidth}{!}{\input{tikz/tapesim}}
-    \end{center}
   \end{figure}
-
-  In the following we show how this simulation can be managed.
-  Let $M_{\text{Walk}}$ be pebble machine that yields $\omega$ on $G$.
-  $M_{\text{Walk}}$ can be implemented as $(\mathcal{O}(1),0,\mathcal{O}(m_{1}))$
-  pebble machine by Theorem \ref{thm:pebblewalk}.
-  In order to manage the simulation we use some
-  variables: $\Tid, \Tsteps, \Twalk, \Thead$ where $\Tid$ is used to identify
-  the index of a vertex on the walk of $M_{\text{Walk}}$, $\Twalk$ is the tape
-  content of $M_{\text{Walk}}$ which can therefore be restarted by setting
-  $\Twalk$ to 0, $\Tsteps$ counts the number of steps taken by
-  $M_{\text{Walk}}$, and $\Thead$ stores where $M$'s head is positioned.
-  Furthermore we need some pebbles to mark certain vertices of the closed walk:
-  $p_{\text{start}}, p_{\text{tmp}}, p_{\text{next}}$ and additionally the
-  pebbles that are placed on the walk to store $M$'s tape content
-  $P_{M} = \left\{p_{0},p_{1},\dots,p_{2m/m_{1}-1}\right\}$.
-  Now the different procedures used for the simulation can be presented:
-  \begin{description}
-    \item[Step():] Simulates on step according to $M_{\text{Walk}}$ and
-      increases $\Tsteps$.
-    \item[FindPebble($p_{i}$):] Executes \emph{Step()} until the pebble $p_{i}$
-      is observed.
-    \item[Restart():] Goes to the beginning of the closed walk by
-      \emph{FindPebble($p_{\text{start}}$)} and sets $\Tsteps,\Tid,\Twalk$ to 0
-    \item[NextDistinctVertex()] Finds the next distinct vertex of the walk. If
-      there are no more vertices on the walk (which means that already
-      $2^{m_1}$ distinct vertices have been traversed; the number of distinct
-      vertices on the walk is given by $\Tid$) it simply executes
-      \emph{Restart()}. Otherwise it does one step and drops $p_{\text{tmp}}$
-      to mark this vertex. It then stores the current amount of steps as well
-      as the current state of $M_{\text{Walk}}$ (introducing two auxiliary
-      variables $\Tsteps',\Twalk'$). It then restarts $M_{\text{Walk}}$ and
-      moves to $p_{\text{tmp}}$ by \emph{FindPebble($p_{\text{tmp}}$)}. If
-      it used the same amount of steps as stored in $\Tsteps'$ then this is the
-      first occurence of the vertex in the closed walk and therefore it is a
-      new distinct vertex and $\Tid$ can be increased. Otherwise the context of
-      $M_{\text{Walk}}$ is restored and the next vertex is checked.
-    \item[GetPebbleId($p_{i}$):] Finds the index of the vertex $p_{i}$ is
-      placed on. Beginning from the start of the closed walk
-      (found by executing \emph{Restart()} it moves along distinct vertices
-      (by using \emph{NextDistinctVertex()}) and returns $\Tid$ as soon as
-      $p_{i}$ is observed.
-    \item[PutPebbleAtId($p_{i},\mathit{id}$):] Puts pebble $p_i$ at a certain
-      index. First it picks up $p_{i}$ and restarts the walk. Then it executes
-      $\mathit{id}$ times \emph{NextDistinctVertex()} and drops $p_{i}$.
-    \item[ReadBit():] Reads the $\Thead$'s bit of $M$'s tape. $\Thead$ gives
-      the position of the bit that should be read. Therefore the pebble
-      $p_{\lfloor \Thead/m_{1}\rfloor}$ encodes this bit. The \enquote{state}
-      of this pebble can be obtained with
-      \emph{GetPebbleId($p_{\lfloor \Thead/m_{1}\rfloor}$)} and from the
-      encoded value the $(\Thead\mod m_{1})$-th bit is the one under $M$'s
-      head.
-    \item[WriteBit($b$):] Writes $b$ to $\Thead$'s bit of $M$'s tape. First
-      $\Thead$'s bit is obtained (by \emph{ReadBit()}). Additionally we
-      identify the encoding pebble $p_{i}$ as already seen for
-      \emph{ReadBit()} and let be $j = \Thead\mod m_{1}$ the offset of the bit
-      within the memory block. If the bit actually flips the value of the
-      memory block changes by $2^j$ (for the flip from 1 to 0 the value
-      decreases and for the flip from 0 to 1 it increases). Therefore $p_{i}$
-      is put either $2^j$ indices up or down which can be easily done by using
-      \emph{PutPebbleAtId(\dots)}.
-  \end{description}
-  These are the procedures used to simulate $M$'s tape. Furthermore we keep
-  $M$'s states in the state space of the simulation. To conclude the simulation
-  we have to consider what happens if $M$ moves from the current vertex to
-  another vertex $v'$. Then the pebble $p_{tmp}$ is dropped on $v'$ and the
-  pebbles are moved to the same index they have in $\omega$ for a new closed
-  walk $\omega'$ (obtained by $M_{\text{Walk}}$ simulated starting in $v'$;
-  this walk is also ensured to have at least $2^{m_1}$ distinct vertices).
+  This concludes the intuition on how the tape of a pebble machine can be
+  simulated by a set of pebbles.
 \end{proof}
 
 As Theorem \ref{thm:pebblewalk} yields a $(c,0,c\cdot\log n)$ pebble machine
@@ -358,7 +309,7 @@ of the exploration approach with pebbles. Specifically, we will argue that
 there are 3-regular graphs that any agent with $p$ pebbles cannot traverse.
 Such graphs are called $p$-barriers.
 
-This construction of barriers is iteratively and relies on a result from
+The construction of a barrier is done iteratively and relies on a result from
 \cite{0barrier} which is used to obtain an initial $0$-barrier.
 \begin{lem}
   \label{lem:0bar}
@@ -371,10 +322,10 @@ In the following we introduce a gadget construction which enforces
 \enquote{locality} of pebbles. For an agent with $p$ pebbles we can exchange
 every edge in a graph $G$ with a copy of a $(p-1)$-barrier $B$. We refer to the
 original vertices as \emph{macro} vertices and to the constructed graph as
-$G(B)$.  Since every edge is replaced by a $(p-1)$-barrier an agent has to use
+$G(B)$.  Since every edge is replaced by a $(p-1)$-barrier, an agent has to use
 at least $p$ pebbles to cross this barrier which means that the agent keeps its
 pebbles nearby because the agent cannot move along \enquote{edges} without
-them.  This leads to the following lemma.
+them. This leads to the following lemma.
 \begin{lem}
   \label{lem:loc}
   Let $B$ be a $(p-1)$-barrier for an agent $\mathcal{A}$ with $p$ pebbles.
@@ -397,14 +348,14 @@ to construct barriers iteratively.
   $\mathcal{A}$.
 \end{thm}
 \begin{proof}
-  For any subset of pebbles of cardinality $p$ we can use $B$ to apply the
+  For any subset of pebbles of cardinality $r$ we can use $B$ to apply the
   locality construction and obtaining a graph $G(B)$. For $G(B)$ we can argue
-  with the use of Lemma \ref{lem:loc} that $\mathcal{A}$ has only a limited
+  using Lemma \ref{lem:loc} that $\mathcal{A}$ has only a limited
   amount of configurations within a macro vertex. Let $\alpha_{B}$ be the
   amount of these configurations. We can now project $\mathcal{A}$ to a pebble
   machine without pebbles $\mathcal{B}$ with $\alpha_{B}$ states which only
   traverses macro vertices. Since $\mathcal{B}$ cannot use any pebbles we can
-  obtain by Lemma \ref{lem:0bar} a barrier $C$ for it. Then we can argue that
+  obtain a barrier $C$ for it by Lemma \ref{lem:0bar}. Then, we can argue that
   $C(B)$ is the desired barrier for $\mathcal{A}$ which uses only the chosen
   subset of pebbles. For all ${p}\choose{r}$ possible subsets of pebbles a
   barrier can be obtained as described above. Connecting these barriers gives
@@ -420,12 +371,9 @@ following theorem.
   $\mathcal{O}(s^{8^{r+1}})$.
 \end{thm}
 
-Using this theorem it is possible to show that any agent with sublogarithmic
+Using this theorem it is possible to show that any agent with sub-logarithmic
 memory needs to use at least $\log\log n$ pebbles to explore a graph with $n$
-vertices. For this result it is essential that from a $p$-barrier with $m$
-vertices for an agent with $p$ pebbles we can construct a trap for this agent
-with $2m+4$ vertices. Due to its technical nature we omit the proof to the
-following theorem.
+vertices.
 \begin{thm}
   For any constant $\epsilon < 0$, an agent with at most
   $\mathcal{O}((\log n)^{1-\epsilon})$ bits of memory needs at least
@@ -433,12 +381,16 @@ following theorem.
   most $n$ vertices.
 \end{thm}
 
+For this result it is essential that from a $p$-barrier with $m$
+vertices for an agent with $p$ pebbles we can construct a trap for this agent
+with $2m+4$ vertices. Due to its technical nature we omit the proof.
+
 \section{Conclusion}
-In this paper re-presented the idea of pebble machines for graph exploration
-as discussed in \cite{pebbles}. We lay the main focus on the simulation of
-memory of pebble machines The idea to give pebbles a state by their placement
-on a closed walk strikes as a very interesting approach. Furthermore it is also
-possible to find limitations of this approach in the form of barriers.
+In this work we presented the idea of pebble machines for graph exploration
+as discussed in \cite{pebbles}. We focus mainly on the simulation of
+memory of pebble machines. The idea to give pebbles a state by their placement
+on a closed walk strikes as a very interesting approach. Furthermore, it is
+also possible to find limitations of this approach in the form of barriers.
 
 \setquotestyle{english}
 \printbibliography
