@@ -19,4 +19,10 @@
 
   \draw[->, shorten <=0.2cm, shorten >=0.2cm,
   decorate,decoration={snake,amplitude=0.3cm, segment length=1.0cm}] (0) to (0');
+
+  \only<3->{
+    \begin{scope}[on background layer]
+      \node[right=4.5cm of 0, circle, fill=red!50, minimum size=22mm] {};
+    \end{scope}
+  }
 \end{tikzpicture}

@@ -11,10 +11,10 @@
   \node[node,above right=0.5cm and 1cm of 2] (8) {};
   \node[node,below right=0.5cm and 1cm of 2] (9) {};
 
-  \draw[edge] (0) to node[very near start, above] {0} node[very near end, above] {1} (1);
-  \draw[edge] (1) to node[very near start, below] {0} node[very near end, above] {1} (2);
-  \draw[edge,bend right] (2.north west) to node[very near start, right] {0} node[very near end, above] {2} (0);
-  \draw[edge] (0) to node[very near start, right] {1} node[very near end, left ] {0} (3);
+  \draw[edge] (0) to node[very near start, above] (l0) {0} node[very near end, above] (e0) {1} (1);
+  \draw[edge] (1) to node[very near start, below] (l1) {0} node[very near end, above] (e1) {1} (2);
+  \draw[edge,bend right] (2.north west) to node[very near start, right] (l2) {0} node[very near end, above] (e2) {2} (0);
+  \draw[edge] (0) to node[very near start, right] (l3) {1} node[very near end, left ] (e3) {0} (3);
   \draw[edge] (3) to node[very near start, above] {1} node[very near end, below] {1} (4);
   \draw[edge] (4) to node[very near start, below] {0} node[very near end, below] {1} (5);
   \draw[edge] (5) to node[very near start, above] {0} node[very near end, below] {2} (1);
@@ -33,18 +33,26 @@
   \end{scope}
   \only<3-3>{\begin{scope}[on background layer]%
       \node [fit=(0), fill=green!50] (layer) {};%
+      \node [fit=(l0), fill=blue!50, inner sep=0pt] {};
   \end{scope}}
   \only<4-4>{\begin{scope}[on background layer]%
-      \node [fit=(3), fill=green!50] (layer) {};%
+      \node [fit=(1), fill=green!50] (layer) {};%
+      \node [fit=(l1), fill=blue!50, inner sep=0pt] {};
+      \node [fit=(e0), fill=red!50, inner sep=0pt] {};
   \end{scope}}
   \only<5-5>{\begin{scope}[on background layer]%
-      \node [fit=(4), fill=green!50] (layer) {};%
+      \node [fit=(2), fill=green!50] (layer) {};%
+      \node [fit=(l2), fill=blue!50, inner sep=0pt] {};
+      \node [fit=(e1), fill=red!50, inner sep=0pt] {};
   \end{scope}}
   \only<6-6>{\begin{scope}[on background layer]%
-      \node [fit=(3), fill=green!50] (layer) {};%
+      \node [fit=(0), fill=green!50] (layer) {};%
+      \node [fit=(l3), fill=blue!50, inner sep=0pt] {};
+      \node [fit=(e2), fill=red!50, inner sep=0pt] {};
   \end{scope}}
   \only<7-7>{\begin{scope}[on background layer]%
-      \node [fit=(4), fill=green!50] (layer) {};%
+      \node [fit=(3), fill=green!50] (layer) {};%
+      \node [fit=(e3), fill=red!50, inner sep=0pt] {};
   \end{scope}}
 
 

@@ -13,21 +13,21 @@
   \end{scope}
 
   \uncover<3->{
-    \node[node] (r11) [below = 6cm of m1] {$0$};
-    \node[node] (r12) [above = 2cm of r11] {$1$};
-    \node[node] (r13) [below = 2cm of r11] {$2$};
+    \node[node] (r11) [below = 6cm of m1] {0};
+    \node[node] (r12) [above = 2cm of r11] {1};
+    \node[node] (r13) [below = 2cm of r11] {2};
 
-    \node[node] (l11) [below = 6cm of m3] {$0$};
-    \node[node] (l12) [above = 2cm of l11] {$1$};
-    \node[node] (l13) [below = 2cm of l11] {$2$};
+    \node[node] (l11) [below = 6cm of m3] {0};
+    \node[node] (l12) [above = 2cm of l11] {1};
+    \node[node] (l13) [below = 2cm of l11] {2};
 
     \node       (anker) [below = 6.5cm of m2] {};
-    \node[node] (mid0) [above right = 1cm and 1cm of anker] {$0$};
-    \node[node] (mid1) [below right = 1cm and 1cm of anker] {$1$};
-    \node[node] (mid2) [below = 3cm of anker] {$2$};
-    \node[node] (mid3) [below left = 1cm and 1cm of anker] {$3$};
-    \node[node] (mid4) [above left = 1cm and 1cm of anker] {$4$};
-    \node[node] (mid5) [above = 3cm of anker] {$5$};
+    \node[node] (mid0) [above right = 1cm and 1cm of anker] {0};
+    \node[node] (mid1) [below right = 1cm and 1cm of anker] {1};
+    \node[node] (mid2) [below = 3cm of anker] {2};
+    \node[node] (mid3) [below left = 1cm and 1cm of anker] {3};
+    \node[node] (mid4) [above left = 1cm and 1cm of anker] {4};
+    \node[node] (mid5) [above = 3cm of anker] {5};
 
     \draw[edge] (r11) to node[left,near end] {1} node[right,near start] {0} (r12);
     \draw[edge] (r11) to node[left,near end] {0} node[right,near start] {1} (r13);

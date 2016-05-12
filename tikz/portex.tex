@@ -8,11 +8,11 @@
   \node[above right=of m2] (e3) {};
   \node[below=of m2] (e4) {};
 
-  \draw[edge] (m1) to node[very near start, above] {\textcolor{green}{0}} (e1);
-  \draw[edge] (m1) to node[near start, left] {\textcolor{green}{2}} (e2);
+  \draw[edge] (m1) to node[very near start, above] {\textcolor{blue}{0}} (e1);
+  \draw[edge] (m1) to node[near start, left] {\textcolor{blue}{2}} (e2);
 
-  \draw[edge] (m2) to node[very near start, above] {\textcolor{green}{1}} (e3);
-  \draw[edge] (m2) to node[near start, right] {\textcolor{green}{2}} (e4);
+  \draw[edge] (m2) to node[very near start, above] {\textcolor{blue}{1}} (e3);
+  \draw[edge] (m2) to node[near start, right] {\textcolor{blue}{2}} (e4);
   
-  \draw[edge] (m1) to node[very near start, below] {\textcolor{green}{1}} node[very near end, above] {\textcolor{green}{0}} (m2);
+  \draw[edge] (m1) to node[very near start, below] {\textcolor{blue}{1}} node[very near end, above] {\textcolor{blue}{0}} (m2);
 \end{tikzpicture}
