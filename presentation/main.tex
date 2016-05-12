@@ -9,6 +9,7 @@
 \usepackage{mdframed}
 \usepackage{graphicx}
 \usepackage{appendixnumberbeamer}
+\usepackage{url}
 
 \input{tikz/settings}
 
@@ -82,8 +83,8 @@
       \item Agent carries set of distinguishable pebbles
       \item Formalisation as pebble machines
         \begin{itemize}
-          \item $(s,p,m)$-pebble machine
           \item $(Q,F,P,m,\delta,\din,\dout,q_{0})$
+          \item $(s,p,m)$-pebble machine
           \item<2-> $\din$: moving onto vertex
           \item<8-> $\dout$: leaving vertex
         \end{itemize}
@@ -188,9 +189,9 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{$3$-regularity}
+  \frametitle{$3$-Regularity}
   \begin{mdframed}[linecolor=purple]
-    Establish $3$-regularity
+    Establish $3$-Regularity
   \end{mdframed}
   \begin{center}
     \uncover<2->{\resizebox{0.7\textwidth}{!}{\input{tikz/regsim}}}
@@ -210,7 +211,7 @@
       \node (d1) {};
       \node[below=2 of d1] (d2) {};
       \draw[->, bend right] (d1) to (d2);
-      \node[rectangle, draw=green, below right=0.3 and 1 of d1]
+      \node[rectangle, draw=purple, below right=0.3 and 1 of d1]
         {3-Regularity};
       \node[rectangle, draw=blue, below right=1 and 1.2 of d1]
         {Periodic Universal Lemma};
@@ -287,12 +288,13 @@
     \begin{enumerate}
       \item \textcolor<3,8>{magenta}{Execute step of $M_{\text{walk}}$}
       \item \textcolor<4,9>{magenta}{Drop pebble $p_{\text{tmp}}$}
-      \item \textcolor<4,9>{magenta}{Store $\Twalk$ in $T'_{\text{walk}}$}
+      \item \textcolor<4,9>{magenta}{Store number of steps $M_{\text{walk}}$
+        executed}
       \item \textcolor<5,10>{magenta}{Restart $M_{\text{walk}}$}
       \item \textcolor<6,11-18>{magenta}{Execute steps of $M_{\text{walk}}$
           until $p_{\text{tmp}}$ is observed}
-      \item \textcolor<19-20>{magenta}{If $\Twalk = T'_{\text{walk}}$ the
-          vertex is new (increase $\Tid$)}
+      \item \textcolor<19-20>{magenta}{Same amount of steps for
+        $M_{\text{walk}}$ to find $p_{\text{tmp}}$ $\rightarrow$ new vertex}
       \item \textcolor<7>{magenta}{Otherwise start over}
     \end{enumerate}
     \column{0.5\textwidth}
@@ -462,6 +464,20 @@
   \frametitle{Lower pebble bound}
   \begin{mdframed}
     \begin{theorem}
+      For $r\leq p$ and $s\geq 2^{p}$, the number of vertices of an $r$-barrier
+      $B_{r}$ for the $s$-state agent $\mathcal{A}$ with $p$ pebbles is bounded
+      by $\mathcal{O}(s^{8^{r+1}})$.
+    \end{theorem}
+  \end{mdframed}
+  \begin{center}
+    \begin{tikzpicture}
+      \node (d1) {};
+      \node[below=1.5 of d1] (d2) {};
+      \draw[->, bend right] (d1) to (d2);
+    \end{tikzpicture}
+  \end{center}
+  \begin{mdframed}
+    \begin{theorem}
       For any constant $\epsilon > 0$, an agent with at most
       $\mathcal{O}((\log n)^{1-\epsilon})$ bits of memory needs at least
       $\Omega(\log\log n)$ distinguishable pebbles for exploring all
@@ -483,9 +499,12 @@
 \end{frame}
 
 \begin{frame}
+  \vspace{0.3\textheight}
   \begin{center}
-    \Huge Thank you for your attention.
+    {\Huge Thank you for your attention.}
   \end{center}
+  \vspace{0.35\textheight}
+  Slides and text on \url{https://github.com/weltoph/sem-pebbles}.
 \end{frame}
 
 \appendix
