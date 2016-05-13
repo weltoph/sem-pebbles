@@ -38,7 +38,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Outlook}
+  \frametitle{Introduction}
   \begin{itemize}
     \item Exploration of huge finite graphs by agents
     \item Agents are located on a vertex and move along edges
@@ -54,8 +54,8 @@
   \begin{columns}
     \column{0.55\textwidth}
     \begin{itemize}
-      \item Finite, but huge
       \item Undirected
+      \item Finite, but huge
       \item Indistinguishable vertices:
       \parbox{\baselineskip}{
         \resizebox{!}{\baselineskip}{
@@ -174,14 +174,14 @@
   \begin{mdframed}[linecolor=magenta]
     \begin{lemma}[Closed Walk Lemma]
       An agent following an exploration sequence of the form
-      $(e_{1},\dots,e_{k})^{\ast}$ moves along a closed walk.
+      $(e_{0},\dots,e_{k-1})^{\ast}$ moves along a closed walk.
     \end{lemma}
   \end{mdframed}
   \uncover<2->{
     \begin{mdframed}[linecolor=blue]
       \begin{lemma}[Periodic Universal Lemma]
         There exists an $\mathcal{O}(\log n)$-space algorithm producing a
-        universal exploration sequence $(e_{1},\dots,e_{k})^{\ast}$ for any
+        universal exploration sequence $(e_{0},\dots,e_{k-1})^{\ast}$ for any
         $3$-regular graph with at most $n$ vertices.
       \end{lemma}
     \end{mdframed}
@@ -504,7 +504,7 @@
     {\Huge Thank you for your attention.}
   \end{center}
   \vspace{0.35\textheight}
-  Slides and text on \url{https://github.com/weltoph/sem-pebbles}.
+  Slides and report on \url{https://github.com/weltoph/sem-pebbles}.
 \end{frame}
 
 \appendix
